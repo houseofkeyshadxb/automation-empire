@@ -1,0 +1,44 @@
+# Sensitive files
+.env
+.credentials/
+*.key
+*.pem
+
+# Virtual environments
+venv/
+venv-agents/
+account-bot-venv/
+pdf-venv/
+agents/venv/
+*/venv/
+__pycache__/
+*.pyc
+
+# Node modules
+node_modules/
+wwebjs-bot/.wwebjs_auth/
+wwebjs-bot/.wwebjs_cache/
+
+# Logs
+logs/
+*.log
+
+# Generated content
+empire-content/
+content-queue/
+music-generated/
+music-ready/
+generated-scripts/
+reports/
+
+# Temporary files
+*.tmp
+.cache/
+.local/
+
+# IDE
+.vscode/
+.idea/
+
+# System
+.DS_Store
