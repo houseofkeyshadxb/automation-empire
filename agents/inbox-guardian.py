@@ -9,7 +9,7 @@ import os
 import sys
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional, Tuple
 import anthropic
 from supabase import create_client, Client
@@ -268,7 +268,7 @@ Call the mcp__claude_ai_Gmail__create_draft tool."""
         """Log all actions to Supabase for tracking and analytics"""
         try:
             data = {
-                'timestamp': datetime.utcnow().isoformat(),
+                'timestamp': datetime.now(timezone.utc).isoformat(),
                 'action_type': action_data.get('action_type'),
                 'thread_id': action_data.get('thread_id'),
                 'category': action_data.get('category'),
@@ -291,7 +291,7 @@ Call the mcp__claude_ai_Gmail__create_draft tool."""
         """Search for recent unprocessed emails using Gmail MCP"""
         try:
             # Calculate time window
-            lookback_time = datetime.utcnow() - timedelta(minutes=LOOKBACK_MINUTES)
+            lookback_time = datetime.now(timezone.utc) - timedelta(minutes=LOOKBACK_MINUTES)
             date_filter = lookback_time.strftime('%Y/%m/%d')
 
             # Search query: unread emails from last LOOKBACK_MINUTES in inbox
@@ -394,7 +394,7 @@ Call the mcp__claude_ai_Gmail__create_draft tool."""
         logger.info("=" * 60)
 
         stats = {
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'emails_processed': 0,
             'auto_replies_sent': 0,
             'categories': {}

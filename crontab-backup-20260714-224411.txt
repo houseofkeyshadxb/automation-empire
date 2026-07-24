@@ -1,0 +1,136 @@
+# ═══════════════════════════════════════════════════════════════════
+# MASTER AUTOMATION EMPIRE - CRON JOBS
+# Mistress Keysha DXB - Automated Revenue Systems
+# ═══════════════════════════════════════════════════════════════════
+
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+HOME=/home/userkeysha2000
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 1: VIDEO GENERATION & CONTENT CREATION
+# ═══════════════════════════════════════════════════════════════════
+
+# Daily video generation (9 AM) - 10 videos per day
+0 9 * * * cd $HOME && ./dual-video-generation.sh >> $HOME/logs/video/daily-generation-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Video generation - $(date)" >> $HOME/logs/FAILURES.log
+
+# Killer video workflow (every 4 hours) - High-quality content
+0 */4 * * * cd $HOME && python3 killer-video-workflow.py >> $HOME/logs/video/killer-workflow-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Killer workflow - $(date)" >> $HOME/logs/FAILURES.log
+
+# YouTube music automation (every 6 hours)
+0 */6 * * * cd $HOME && ./youtube-music-automation.sh >> $HOME/logs/video/youtube-music-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: YouTube music - $(date)" >> $HOME/logs/FAILURES.log
+
+# Auto-generate findom videos (every 8 hours)
+0 */8 * * * cd $HOME && ./auto-generate-findom-videos.sh >> $HOME/logs/video/findom-videos-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Findom videos - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 2: EMPIRE SITES MANAGEMENT
+# ═══════════════════════════════════════════════════════════════════
+
+# Deploy high-converting sites (daily at 2 AM)
+0 2 * * * cd $HOME/empire-sites && ./deploy-high-converting.sh >> $HOME/logs/empire/deploy-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Empire deploy - $(date)" >> $HOME/logs/FAILURES.log
+
+# Write all pages (every 12 hours)
+0 */12 * * * cd $HOME/empire-sites && ./write-all-pages.sh >> $HOME/logs/empire/write-pages-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Write pages - $(date)" >> $HOME/logs/FAILURES.log
+
+# Pre-launch check (daily at 1 AM)
+0 1 * * * cd $HOME/empire-sites && ./pre-launch-check.sh >> $HOME/logs/empire/pre-launch-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Pre-launch check - $(date)" >> $HOME/logs/FAILURES.log
+
+# Generate preview gallery (every 6 hours)
+0 */6 * * * cd $HOME/empire-sites && python3 generate_preview_gallery.py >> $HOME/logs/empire/preview-gallery-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Preview gallery - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 3: ACCOUNT CREATION & AUTOMATION
+# ═══════════════════════════════════════════════════════════════════
+
+# Auto account creator (every 3 hours) - Create platform accounts
+0 */3 * * * cd $HOME && python3 auto-account-creator-FULL.py >> $HOME/logs/accounts/auto-creator-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Account creator - $(date)" >> $HOME/logs/FAILURES.log
+
+# Dual account automation (every 2 hours) - Manage multiple accounts
+0 */2 * * * cd $HOME && python3 dual-account-automation.py >> $HOME/logs/accounts/dual-automation-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Dual account automation - $(date)" >> $HOME/logs/FAILURES.log
+
+# Browser automation agent (every 4 hours) - Auto-posting
+0 */4 * * * cd $HOME && python3 browser-automation-agent.py >> $HOME/logs/accounts/browser-automation-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Browser automation - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 4: INTELLIGENT AGENTS
+# ═══════════════════════════════════════════════════════════════════
+
+# Content engine (every hour) - Generate content ideas
+0 * * * * cd $HOME/agents && python3 content-engine.py >> $HOME/logs/agents/content-engine-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Content engine - $(date)" >> $HOME/logs/FAILURES.log
+
+# Market scout (every 2 hours) - Research trends
+0 */2 * * * cd $HOME/agents && ./run-market-scout.sh >> $HOME/logs/agents/market-scout-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Market scout - $(date)" >> $HOME/logs/FAILURES.log
+
+# Analytics oracle (every 6 hours) - Performance tracking
+0 */6 * * * cd $HOME/agents && python3 analytics-oracle.py >> $HOME/logs/agents/analytics-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Analytics oracle - $(date)" >> $HOME/logs/FAILURES.log
+
+# Lead nurture (every 30 minutes) - Follow up on leads
+*/30 * * * * cd $HOME/agents && python3 lead-nurture.py >> $HOME/logs/agents/lead-nurture-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Lead nurture - $(date)" >> $HOME/logs/FAILURES.log
+
+# Inbox guardian (every 15 minutes) - Email management
+*/15 * * * * cd $HOME/agents && python3 inbox-guardian.py >> $HOME/logs/agents/inbox-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Inbox guardian - $(date)" >> $HOME/logs/FAILURES.log
+
+# Call monitor (every 10 minutes) - Track call activity
+*/10 * * * * cd $HOME/agents && python3 call-monitor.py >> $HOME/logs/agents/call-monitor-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Call monitor - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 5: VOICE & CALLING SYSTEMS
+# ═══════════════════════════════════════════════════════════════════
+
+# Claude calls you (hourly) - AI calling system
+0 * * * * cd $HOME && python3 claude-calls-you.py >> $HOME/logs/voice/claude-calls-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Claude calling - $(date)" >> $HOME/logs/FAILURES.log
+
+# Voice to text (every 5 minutes) - Transcription service
+
+# Generate voice samples (daily at 4 AM)
+0 4 * * * cd $HOME && ./generate-voice-samples.sh >> $HOME/logs/voice/voice-samples-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Voice samples - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 6: TELEGRAM & COMMUNICATION
+# ═══════════════════════════════════════════════════════════════════
+
+# Telegram bot (every 2 minutes) - Message handling
+*/2 * * * * cd $HOME && node telegram-bot-live.js >> $HOME/logs/telegram/bot-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Telegram bot - $(date)" >> $HOME/logs/FAILURES.log
+
+# Simple notify (every 30 minutes) - Send notifications
+*/30 * * * * cd $HOME && python3 simple-notify.py >> $HOME/logs/telegram/notify-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Notifications - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 7: MASTER ORCHESTRATION
+# ═══════════════════════════════════════════════════════════════════
+
+# Master overseer (every 5 minutes) - Monitor all systems
+*/5 * * * * cd $HOME && python3 master-overseer.py >> $HOME/logs/monitoring/overseer-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Master overseer - $(date)" >> $HOME/logs/FAILURES.log
+
+# Ask AI (hourly) - AI assistance
+0 * * * * cd $HOME && python3 ask-ai.py >> $HOME/logs/monitoring/ask-ai-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Ask AI - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 8: MAINTENANCE & REPORTING
+# ═══════════════════════════════════════════════════════════════════
+
+# Archive old logs (daily at 5 AM)
+0 5 * * * find $HOME/logs -name "*.log" -mtime +7 -exec mv {} $HOME/logs/archive/ \; 2>/dev/null
+
+# Compress archived logs (weekly on Sunday at 6 AM)
+0 6 * * 0 cd $HOME/logs/archive && tar -czf logs-$(date +\%Y\%m\%d).tar.gz *.log 2>/dev/null && rm -f *.log
+
+# Daily failure report (8 AM) - Send summary to Telegram
+0 8 * * * cd $HOME && cat $HOME/logs/FAILURES.log | tail -50 | python3 simple-notify.py "Daily Failure Report" >> $HOME/logs/monitoring/failure-report.log 2>&1 && echo "" > $HOME/logs/FAILURES.log
+
+# System health check (every hour)
+0 * * * * cd $HOME && echo "=== SYSTEM HEALTH $(date) ===" >> $HOME/logs/monitoring/health.log && ps aux | grep -E "(python|node|bash)" | wc -l >> $HOME/logs/monitoring/health.log
+
+# Disk space monitor (every 6 hours)
+0 */6 * * * df -h ~ >> $HOME/logs/monitoring/disk-space-$(date +\%Y\%m\%d).log 2>&1
+
+# Daily revenue report (9 PM)
+0 21 * * * cd $HOME && python3 -c "import datetime; print(f'Revenue Report - {datetime.date.today()}')" >> $HOME/logs/monitoring/revenue-$(date +\%Y\%m\%d).log 2>&1
+
+# ═══════════════════════════════════════════════════════════════════
+# END OF MASTER CRON CONFIGURATION
+# Total Jobs: 35+ automated tasks
+# Revenue Streams: Content, Calls, Sites, Accounts
+# ═══════════════════════════════════════════════════════════════════
+

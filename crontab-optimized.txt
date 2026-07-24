@@ -1,0 +1,92 @@
+# ═══════════════════════════════════════════════════════════════════
+# OPTIMIZED MASTER AUTOMATION EMPIRE - CRON JOBS
+# Reduced from 164 to 20 jobs - Fixed duplicate process issues
+# ═══════════════════════════════════════════════════════════════════
+
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+HOME=/home/userkeysha2000
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 1: VIDEO GENERATION & CONTENT CREATION (4 jobs)
+# ═══════════════════════════════════════════════════════════════════
+
+# Daily video generation (9 AM) - 10 videos per day
+0 9 * * * cd $HOME && ./dual-video-generation.sh >> $HOME/logs/video/daily-generation-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Video generation - $(date)" >> $HOME/logs/FAILURES.log
+
+# Killer video workflow (every 6 hours instead of 4) - High-quality content
+0 */6 * * * cd $HOME && . $HOME/.env && python3 killer-video-workflow.py >> $HOME/logs/video/killer-workflow-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Killer workflow - $(date)" >> $HOME/logs/FAILURES.log
+
+# YouTube music automation (every 12 hours instead of 6)
+0 */12 * * * cd $HOME && ./youtube-music-automation.sh >> $HOME/logs/video/youtube-music-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: YouTube music - $(date)" >> $HOME/logs/FAILURES.log
+
+# Auto-generate findom videos (daily at 3 PM instead of every 8 hours)
+0 15 * * * cd $HOME && ./auto-generate-findom-videos.sh >> $HOME/logs/video/findom-videos-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Findom videos - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 2: EMPIRE SITES MANAGEMENT (3 jobs)
+# ═══════════════════════════════════════════════════════════════════
+
+# Deploy high-converting sites (daily at 2 AM)
+0 2 * * * cd $HOME/empire-sites && ./deploy-high-converting.sh >> $HOME/logs/empire/deploy-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Empire deploy - $(date)" >> $HOME/logs/FAILURES.log
+
+# Write all pages (daily at 3 AM instead of every 12 hours)
+0 3 * * * cd $HOME/empire-sites && ./write-all-pages.sh >> $HOME/logs/empire/write-pages-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Write pages - $(date)" >> $HOME/logs/FAILURES.log
+
+# Generate preview gallery (daily at 4 AM instead of every 6 hours)
+0 4 * * * cd $HOME/empire-sites && python3 generate_preview_gallery.py >> $HOME/logs/empire/preview-gallery-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Preview gallery - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 3: ACCOUNT AUTOMATION (2 jobs)
+# ═══════════════════════════════════════════════════════════════════
+
+# Auto account creator (daily at 11 PM instead of every 3 hours)
+0 23 * * * cd $HOME && . $HOME/.env && python3 auto-account-creator-FULL.py >> $HOME/logs/accounts/auto-creator-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Account creator - $(date)" >> $HOME/logs/FAILURES.log
+
+# Browser automation agent (every 6 hours instead of 4)
+0 */6 * * * cd $HOME && . $HOME/.env && /home/userkeysha2000/venv-agents/bin/python3 browser-automation-agent.py >> $HOME/logs/accounts/browser-automation-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Browser automation - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 4: INTELLIGENT AGENTS (5 jobs with process guards)
+# ═══════════════════════════════════════════════════════════════════
+
+# Content engine (every 2 hours instead of hourly)
+0 */2 * * * cd $HOME/agents && . $HOME/.env && /home/userkeysha2000/venv-agents/bin/python3 content-engine.py >> $HOME/logs/agents/content-engine-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Content engine - $(date)" >> $HOME/logs/FAILURES.log
+
+# Market scout (every 4 hours instead of 2)
+0 */4 * * * cd $HOME/agents && ./run-market-scout.sh >> $HOME/logs/agents/market-scout-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Market scout - $(date)" >> $HOME/logs/FAILURES.log
+
+# Analytics oracle (every 12 hours instead of 6)
+0 */12 * * * cd $HOME/agents && . $HOME/.env && /home/userkeysha2000/venv-agents/bin/python3 analytics-oracle.py >> $HOME/logs/agents/analytics-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Analytics oracle - $(date)" >> $HOME/logs/FAILURES.log
+
+# Lead nurture (hourly instead of every 30 min) - WITH GUARD
+0 * * * * cd $HOME/agents && . $HOME/.env && /home/userkeysha2000/venv-agents/bin/python3 lead-nurture.py >> $HOME/logs/agents/lead-nurture-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Lead nurture - $(date)" >> $HOME/logs/FAILURES.log
+
+# Inbox guardian (every 30 min instead of 15) - WITH GUARD
+*/30 * * * * $HOME/run-inbox-guardian.sh
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 5: MONITORING & NOTIFICATIONS (3 jobs with process guards)
+# ═══════════════════════════════════════════════════════════════════
+
+# Telegram bot (every 15 min instead of 2) - WITH PROCESS GUARD
+*/15 * * * * $HOME/run-telegram-bot.sh
+
+# Master overseer (every 30 min instead of 5) - WITH PROCESS GUARD
+*/30 * * * * $HOME/run-master-overseer.sh
+
+# System health check (every 6 hours)
+0 */6 * * * cd $HOME && ./check-automation-status.sh >> $HOME/logs/monitoring/health-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Health check - $(date)" >> $HOME/logs/FAILURES.log
+
+# ═══════════════════════════════════════════════════════════════════
+# SECTION 6: MAINTENANCE & CLEANUP (3 jobs)
+# ═══════════════════════════════════════════════════════════════════
+
+# Archive old logs (daily at 5 AM)
+0 5 * * * cd $HOME/logs && find . -name "*.log" -mtime +7 -exec gzip {} \; 2>> $HOME/logs/FAILURES.log
+
+# Clear old failures log (weekly on Sunday at 6 AM)
+0 6 * * 0 echo "" > $HOME/logs/FAILURES.log
+
+# Daily revenue report (9 PM)
+0 21 * * * cd $HOME && ./generate-revenue-report.sh >> $HOME/logs/reports/revenue-$(date +\%Y\%m\%d).log 2>&1 || echo "FAIL: Revenue report - $(date)" >> $HOME/logs/FAILURES.log

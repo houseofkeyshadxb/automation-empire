@@ -74,15 +74,24 @@ class AnalyticsOracle:
     """Analytics Oracle AI Agent - Weekly Business Intelligence"""
 
     def __init__(self):
-        self.supabase_url = os.getenv("SUPABASE_URL")
-        self.supabase_key = os.getenv("SUPABASE_KEY")
+        self.supabase_url = os.getenv("SUPABASE_URL", "")
+        self.supabase_key = os.getenv("SUPABASE_KEY", "")
         self.telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
         self.telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
-        if not all([self.supabase_url, self.supabase_key]):
-            raise ValueError("Missing required environment variables: SUPABASE_URL, SUPABASE_KEY")
+        # Initialize Supabase if credentials are valid
+        self.supabase = None
+        if (self.supabase_url and self.supabase_key and
+            not self.supabase_url.startswith("https://placeholder")):
+            try:
+                self.supabase: Client = create_client(self.supabase_url, self.supabase_key)
+                print("✅ Connected to Supabase")
+            except Exception as e:
+                print(f"⚠️  Supabase connection failed: {e}")
+                print("Running in standalone mode - reports will be file-based only")
+        else:
+            print("⚠️  Supabase not configured - running in standalone mode")
 
-        self.supabase: Client = create_client(self.supabase_url, self.supabase_key)
         self.reports_dir = os.path.expanduser("~/reports")
         os.makedirs(self.reports_dir, exist_ok=True)
 

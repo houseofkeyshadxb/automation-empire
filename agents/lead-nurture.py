@@ -19,13 +19,20 @@ from dotenv import load_dotenv
 load_dotenv(os.path.expanduser('~/.env'))
 
 # Configuration
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 FANVUE_API_KEY = os.getenv("FANVUE_API_KEY", "")
 
 # Initialize clients
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = None
+if SUPABASE_URL and SUPABASE_KEY and not SUPABASE_URL.startswith("https://placeholder"):
+    try:
+        supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception as e:
+        print(f"⚠️  Supabase connection failed: {e}")
+        print("Running in standalone mode without database logging")
+
 anthropic = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
