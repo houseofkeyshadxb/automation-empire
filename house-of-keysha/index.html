@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>House of Keysha Empire — Dubai Elite BDSM | Multi‑Persona Luxury Platform</title>
+    <meta name="description" content="House of Keysha Empire – Dubai's most exclusive private dominion. Mistress Keysha and her stable: Mae, Pepper, Becky, and Master Ron." />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --crimson: #dc143c;
+            --gold: #f0c040;
+            --oxblood: #6a1a1a;
+            --hotpink: #ff69b4;
+            --pureblack: #0a0a0a;
+            --cardbg: #12121a;
+            --transition: 0.4s cubic-bezier(0.22,1,0.36,1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background:var(--pureblack); color:#e0e0e0;
+            font-family:'Inter',sans-serif; font-weight:300; line-height:1.7; overflow-x:hidden;
+        }
+        h1,h2,h3,h4 { font-family:'Cormorant Garamond',serif; font-weight:600; letter-spacing:1px; }
+        .container { max-width:1200px; margin:0 auto; padding:0 1.5rem; }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: var(--cardbg);
+            border: 2px solid var(--crimson);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(220,20,60,0.3);
+        }
+        .chat-header {
+            background: linear-gradient(135deg, var(--crimson), var(--hotpink));
+            padding: 16px;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 90%;
+            word-wrap: break-word;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: var(--crimson);
+            color: white;
+        }
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(240,192,64,0.15);
+            border-left: 3px solid var(--gold);
+        }
+        .chat-input-group {
+            padding: 12px;
+            border-top: 1px solid rgba(240,192,64,0.2);
+            display: flex;
+            gap: 8px;
+        }
+        .chat-input-group input, .chat-input-group button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: none;
+        }
+        .chat-input-group input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            color: #e0e0e0;
+        }
+        .chat-input-group button {
+            background: var(--crimson);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .chat-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--crimson), var(--hotpink));
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(220,20,60,0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0f0f 0%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(220,20,60,0.5);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 14px 40px;
+            background: var(--crimson);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all var(--transition);
+            border: 2px solid var(--crimson);
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            background: transparent;
+            color: var(--crimson);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .personas-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a0f0f 100%);
+        }
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .persona-card {
+            background: var(--cardbg);
+            border: 2px solid rgba(240,192,64,0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .persona-card:hover {
+            border-color: var(--crimson);
+            transform: translateY(-8px);
+        }
+        .persona-card h3 {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .persona-btn {
+            padding: 10px 20px;
+            background: rgba(220,20,60,0.2);
+            border: 1px solid var(--crimson);
+            color: var(--crimson);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .chat-widget { width: 100%; height: 400px; bottom: 10px; right: 10px; left: 10px; }
+            .personas-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>🏰 House of Keysha Empire</h1>
+        <p>Dubai's Most Exclusive Private Dominion</p>
+        <p style="font-size: 1rem; color: #999; margin-top: 20px;">
+            Mistress Keysha • Becky • Mae • Pepper • Master Ron
+        </p>
+        <div style="margin-top: 40px;">
+            <button class="cta-button" onclick="openChat('keysha')">💬 Chat Now</button>
+            <button class="cta-button" onclick="scrollTo('booking')">📅 Book</button>
+        </div>
+    </div>
+</section>
+
+<section class="personas-section">
+    <div class="container">
+        <h2 class="section-title">Meet the House</h2>
+        <div class="personas-grid">
+            <div class="persona-card">
+                <h3>👑 Mistress Keysha</h3>
+                <p>The Empress</p>
+                <button class="persona-btn" onclick="openChat('keysha')">Chat</button>
+            </div>
+            <div class="persona-card">
+                <h3>🌹 Becky</h3>
+                <p>The Muse</p>
+                <button class="persona-btn" onclick="openChat('becky')">Chat</button>
+            </div>
+            <div class="persona-card">
+                <h3>🌸 Mae</h3>
+                <p>The Guide</p>
+                <button class="persona-btn" onclick="openChat('mae')">Chat</button>
+            </div>
+            <div class="persona-card">
+                <h3>🌶️ Pepper</h3>
+                <p>The Enchantress</p>
+                <button class="persona-btn" onclick="openChat('pepper')">Chat</button>
+            </div>
+            <div class="persona-card">
+                <h3>⚔️ Master Ron</h3>
+                <p>The Director</p>
+                <button class="persona-btn" onclick="openChat('ron')">Chat</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="booking" style="padding: 80px 0; background: #0a0a0a;">
+    <div class="container" style="max-width: 600px;">
+        <h2 class="section-title">Book Now</h2>
+        <div style="background: var(--cardbg); padding: 40px; border-radius: 12px; border: 2px solid rgba(240,192,64,0.3);">
+            <form onsubmit="handleBooking(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                <select style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                    <option>Select Persona</option>
+                    <option>👑 Mistress Keysha</option>
+                    <option>🌹 Becky</option>
+                    <option>🌸 Mae</option>
+                    <option>🌶️ Pepper</option>
+                    <option>⚔️ Master Ron</option>
+                </select>
+                <input type="email" placeholder="Email" required style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                <input type="tel" placeholder="WhatsApp" style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                <button type="submit" class="cta-button">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<button class="chat-trigger" id="chatTrigger" onclick="toggleChat()">💬</button>
+
+<div class="chat-widget" id="chatWidget" style="display: none;">
+    <div class="chat-header">
+        <span id="chatPersona">Mistress Keysha</span>
+        <button class="chat-close" onclick="closeChat()" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px;">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-group">
+        <input type="text" id="chatInput" placeholder="Message..." onkeypress="handleChatKey(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+let currentPersona = 'keysha';
+
+function openChat(persona) {
+    currentPersona = persona;
+    const names = { keysha: '👑 Mistress Keysha', becky: '🌹 Becky', mae: '🌸 Mae', pepper: '🌶️ Pepper', ron: '⚔️ Master Ron' };
+    document.getElementById('chatPersona').textContent = names[persona];
+    document.getElementById('chatMessages').innerHTML = '<div class="message bot">Hey baby 💋</div>';
+    toggleChat();
+}
+
+function toggleChat() {
+    const w = document.getElementById('chatWidget');
+    const t = document.getElementById('chatTrigger');
+    if (w.style.display === 'none') {
+        w.style.display = 'flex';
+        t.style.display = 'none';
+    } else {
+        w.style.display = 'none';
+        t.style.display = 'flex';
+    }
+}
+
+function closeChat() {
+    document.getElementById('chatWidget').style.display = 'none';
+    document.getElementById('chatTrigger').style.display = 'flex';
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const messagesDiv = document.getElementById('chatMessages');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.textContent = msg;
+    messagesDiv.appendChild(userMsg);
+    input.value = '';
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    const botMsg = document.createElement('div');
+    botMsg.className = 'message bot';
+    botMsg.textContent = '✓ Message received - Empire reply coming...';
+    messagesDiv.appendChild(botMsg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function handleChatKey(event) {
+    if (event.key === 'Enter') sendMessage();
+}
+
+function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+function handleBooking(e) {
+    e.preventDefault();
+    alert('✓ Inquiry sent! Check WhatsApp in 24 hours.');
+}
+
+console.log('🏰 House of Keysha Empire Live');
+</script>
+
+</body>
+</html>

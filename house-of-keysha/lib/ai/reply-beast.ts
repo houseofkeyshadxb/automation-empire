@@ -1,0 +1,98 @@
+import { getFunnelStateFromDB, saveFunnelState } from './funnel-state';
+import { evaluateNextStage } from './intent-parser';
+import { buildCloserSystemPrompt } from './closer-engine';
+import { detectDeliveryIntent, buildDeliveryReply } from './delivery';
+type Msg = { role: 'system' | 'user' | 'assistant'; content: string };
+function buildChain() {
+  const c: { name: string; url: string; key: string; model: string }[] = [];
+  if (process.env.GROQ_API_KEY)       c.push({ name: 'groq',       url: 'https://api.groq.com/openai/v1/chat/completions', key: process.env.GROQ_API_KEY, model: 'qwen/qwen3.8-27b' });
+  if (process.env.GEMINI_API_KEY)     c.push({ name: 'gemini',     url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', key: process.env.GEMINI_API_KEY, model: 'gemini-2.0-flash' });
+  if (process.env.MISTRAL_API_KEY)    c.push({ name: 'mistral',    url: 'https://api.mistral.ai/v1/chat/completions', key: process.env.MISTRAL_API_KEY, model: 'mistral-small-latest' });
+  if (process.env.OPENROUTER_API_KEY) c.push({ name: 'openrouter', url: 'https://openrouter.ai/api/v1/chat/completions', key: process.env.OPENROUTER_API_KEY, model: 'meta-llama/llama-3.3-70b-instruct:free' });
+  return c;
+}
+function allowedPrices(): Set<string> {
+  const s = new Set<string>();
+  return s;
+}
+function sanitize(text: string): string {
+  const ok = allowedPrices();
+  text = text.replace(/\b(\d{2,6})\s*AED\b/gi, (m, n) => ok.has(n) ? m : 'the listed price');
+  text = text.replace(/\b(discount|cheaper|special offer|reduced|half price)\b/gi, 'a bonus');
+  return text.trim();
+}
+export async function generateMaxineReply(args: { sessionKey: string; messages: Msg[] 
+  
+}): Promise<{ text: string; provider: string }> {
+  const current = await getFunnelStateFromDB(args.sessionKey);
+  const lastUser = [...args.messages].reverse().find(m => m.role === 'user');
+  const userText = lastUser?.content || '';
+
+  // Handle delivery messages separately.
+  const deliveryIntent = detectDeliveryIntent(userText);
+  if (deliveryIntent === 'driver') {
+    return {
+      text: 'Please contact the recipient directly for delivery instructions.',
+      provider: 'delivery_handler'
+    };
+  }
+
+  if (deliveryIntent === 'customer_asking') {
+    return {
+      text: 'This business does not ship products. Please contact the seller you ordered from.',
+      provider: 'delivery_handler'
+    };
+  }
+
+  const next = evaluateNextStage(current, userText);
+  const system = buildCloserSystemPrompt(next);
+  const chain = buildChain();
+  if (chain.length === 0) throw new Error('No AI providers configured');
+  const llmMessages: Msg[] = [{ role: 'system', content: system }, ...args.messages.slice(-20)];
+  for (const p of chain) {
+    try {
+      const res = await fetch(p.url, { method: 'POST', headers: { Authorization: `Bearer ${p.key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: p.model, messages: llmMessages, max_tokens: 500, temperature: 0.85 }), signal: AbortSignal.timeout(15000) });
+      if (!res.ok) continue;
+      const data = await res.json();
+      let text = (data.choices?.[0]?.message?.content || data.choices?.[0]?.message?.reasoning || '').trim();
+      if (text) { 
+        text = sanitize(text); 
+        
+        // --- 🚨 MIDDLEWARE INTERCEPTION START ---
+        let finalText = String(text || '');
+
+        // 1. Catch [[SKIP]]
+        if (finalText.includes('[[SKIP]]')) {
+          return { text: "I think you may have the wrong number — this is a private line.", provider: 'skip_handler' };
+        }
+
+        // 2. Catch [[ALERT:...]]
+        if (finalText.includes('[[ALERT:')) {
+          const match = finalText.match(/\[\[ALERT:(.*?)\]\]/);
+          if (match) {
+            console.log(`🚨 HUMAN ALERT TRIGGERED: ${match[1]} for session ${args.sessionKey}`);
+            finalText = finalText.replace(/\[\[ALERT:.*?\]\]/g, '').trim();
+          }
+        }
+
+        // 3. Catch [INTAKE:...]
+        if (finalText.includes('[INTAKE:')) {
+          const match = finalText.match(/\[INTAKE:(.*?)\]/);
+          if (match) {
+            console.log(`📝 INTAKE SAVED: ${match[1]} for session ${args.sessionKey}`);
+            finalText = finalText.replace(/\[INTAKE:.*?\]/g, '').trim();
+          }
+        }
+
+        // 4. Strip Image Tags
+        finalText = finalText.replace(/\[\[IMG:.*?\]\]/g, '').trim();
+        // --- 🚨 MIDDLEWARE INTERCEPTION END ---
+
+        await saveFunnelState(args.sessionKey, next); 
+        return { text: finalText, provider: p.name }; 
+      }
+    } catch { /* try next */ }
+  }
+  await saveFunnelState(args.sessionKey, { ...next, stage: 'HUMAN_HANDOFF' });
+  return { text: "I've transferred our chat to a team member who will assist you shortly.", provider: 'human_handoff' };
+}

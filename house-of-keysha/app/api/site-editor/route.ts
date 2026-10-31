@@ -1,0 +1,292 @@
+import { NextResponse } from 'next/server';
+import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
+import { getDb } from '../../../lib/supabase/server';
+import {
+  CONTENT_BUCKET,
+  IMAGE_BUCKET,
+  pageNames,
+  listDocs,
+  readDoc,
+  writeDoc,
+  type ContentDoc
+} from '../../../lib/content-store';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+const respond = (value: unknown, status = 200) =>
+  NextResponse.json(value, {
+    status,
+    headers: { 'Cache-Control': 'no-store' }
+  });
+
+function authorized(req: Request) {
+  const expected = process.env.CMS_ADMIN_TOKEN || '';
+  const actual = (req.headers.get('authorization') || '')
+    .replace(/^Bearer /, '');
+
+  if (expected.length < 32 || actual.length > 512) return false;
+
+  return timingSafeEqual(
+    createHash('sha256').update(expected).digest(),
+    createHash('sha256').update(actual).digest()
+  );
+}
+
+function imageUrl(value: unknown) {
+  const prefix =
+    `${(process.env.SUPABASE_URL || '').replace(/\/$/, '')}` +
+    `/storage/v1/object/public/${IMAGE_BUCKET}/`;
+
+  return typeof value === 'string'
+    && value.startsWith(prefix)
+    && value.length < 1500;
+}
+
+function validate(value: unknown): ContentDoc {
+  if (!value || typeof value !== 'object') {
+    throw new Error('Invalid content.');
+  }
+
+  const d = value as Record<string, unknown>;
+
+  if (
+    !['page', 'post'].includes(String(d.kind))
+    || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(d.id))
+    || String(d.id).length > 80
+  ) {
+    throw new Error('Use a slug with lowercase letters, numbers and hyphens.');
+  }
+
+  if (d.kind === 'page' && !pageNames[String(d.id)]) {
+    throw new Error('Unknown page.');
+  }
+
+  for (const key of ['title', 'excerpt', 'body', 'category']) {
+    if (typeof d[key] !== 'string') {
+      throw new Error('Text fields must contain text.');
+    }
+  }
+
+  if (
+    !String(d.title).trim()
+    || String(d.title).length > 180
+    || String(d.excerpt).length > 600
+    || String(d.body).length > 80000
+    || String(d.category).length > 80
+  ) {
+    throw new Error('Check title and content lengths.');
+  }
+
+  if (
+    typeof d.published !== 'boolean'
+    || !Array.isArray(d.images)
+    || d.images.length > 30
+  ) {
+    throw new Error('Invalid publication status or gallery.');
+  }
+
+  const images = d.images.map((item: unknown) => {
+    if (!item || typeof item !== 'object') {
+      throw new Error('Invalid image.');
+    }
+
+    const image = item as Record<string, unknown>;
+
+    if (
+      !imageUrl(image.url)
+      || typeof image.alt !== 'string'
+      || image.alt.length > 300
+    ) {
+      throw new Error('Use editor uploads and captions under 300 characters.');
+    }
+
+    return {
+      url: image.url as string,
+      alt: image.alt as string
+    };
+  });
+
+  return {
+    id: String(d.id),
+    kind: d.kind as 'page' | 'post',
+    title: String(d.title).trim(),
+    excerpt: String(d.excerpt),
+    body: String(d.body),
+    category: String(d.category),
+    images,
+    published: d.published,
+    updatedAt: new Date().toISOString()
+  };
+}
+
+export async function GET(req: Request) {
+  if (!authorized(req)) {
+    return respond({
+      error: 'Invalid admin key, or CMS_ADMIN_TOKEN is missing.'
+    }, 401);
+  }
+
+  try {
+    return respond({
+      docs: [...await listDocs('page'), ...await listDocs('post')]
+    });
+  } catch {
+    return respond({
+      error: 'Content storage is not ready. Click Initialize content storage.'
+    }, 503);
+  }
+}
+
+export async function POST(req: Request) {
+  if (!authorized(req)) return respond({ error: 'Unauthorized' }, 401);
+
+  try {
+    if (Number(req.headers.get('content-length') || 0) > 4 * 1024 * 1024) {
+      return respond({ error: 'Upload one image smaller than 3 MB.' }, 413);
+    }
+
+    if ((req.headers.get('content-type') || '').includes('multipart/form-data')) {
+      const form = await req.formData();
+      const file = form.get('file');
+
+      if (!(file instanceof File) || file.size > 3 * 1024 * 1024) {
+        return respond({
+          error: 'Choose a PNG, JPEG or WebP smaller than 3 MB.'
+        }, 400);
+      }
+
+      const bytes = Buffer.from(await file.arrayBuffer());
+      let ext = '';
+      let mime = '';
+
+      if (
+        bytes.subarray(0, 8).equals(
+          Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
+        )
+      ) {
+        ext = 'png';
+        mime = 'image/png';
+      } else if (
+        bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255
+      ) {
+        ext = 'jpg';
+        mime = 'image/jpeg';
+      } else if (
+        bytes.toString('ascii', 0, 4) === 'RIFF'
+        && bytes.toString('ascii', 8, 12) === 'WEBP'
+      ) {
+        ext = 'webp';
+        mime = 'image/webp';
+      } else {
+        return respond({
+          error: 'Only PNG, JPEG and WebP images are supported.'
+        }, 400);
+      }
+
+      const name = `${randomUUID()}.${ext}`;
+      const { error } = await getDb().storage
+        .from(IMAGE_BUCKET)
+        .upload(name, bytes, {
+          contentType: mime,
+          cacheControl: '31536000',
+          upsert: false
+        });
+
+      if (error) {
+        throw new Error('Image upload failed. Initialize storage and check space.');
+      }
+
+      const { data } = getDb().storage
+        .from(IMAGE_BUCKET)
+        .getPublicUrl(name);
+
+      return respond({ url: data.publicUrl });
+    }
+
+    const raw = await req.text();
+    if (raw.length > 120000) {
+      return respond({ error: 'Content is too large.' }, 413);
+    }
+
+    const input = JSON.parse(raw);
+
+    if (input.action === 'setup') {
+      const buckets = [
+        [CONTENT_BUCKET, false, ['application/json']],
+        [IMAGE_BUCKET, true, ['image/jpeg', 'image/png', 'image/webp']]
+      ] as const;
+
+      for (const [name, isPublic, mimes] of buckets) {
+        const { data: existing } = await getDb().storage.getBucket(name);
+
+        if (existing && existing.public !== isPublic) {
+          throw new Error('Existing bucket visibility does not match configuration.');
+        }
+
+        if (!existing) {
+          const { error } = await getDb().storage.createBucket(name, {
+            public: isPublic,
+            fileSizeLimit: 3 * 1024 * 1024,
+            allowedMimeTypes: [...mimes]
+          });
+
+          if (error) {
+            throw new Error(
+              'Storage setup failed: ' + error.message
+            );
+          }
+        }
+      }
+
+      for (const [id, title] of Object.entries(pageNames)) {
+        if (!await readDoc('page', id)) {
+          await writeDoc({
+            id,
+            kind: 'page',
+            title,
+            excerpt: id === 'home'
+              ? 'An Empire of Elegance, Authority, and Mystery.'
+              : '',
+            body: '',
+            category: '',
+            images: [],
+            published: true,
+            updatedAt: new Date().toISOString()
+          });
+        }
+      }
+
+      return respond({ ok: true });
+    }
+
+    if (input.action === 'save') {
+      const doc = validate(input.doc);
+      await writeDoc(doc);
+      return respond({ doc });
+    }
+
+    if (input.action === 'delete') {
+      if (
+        input.kind !== 'post'
+        || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(input.id))
+        || String(input.id).length > 80
+      ) {
+        throw new Error('Only blog posts can be deleted.');
+      }
+
+      const { error } = await getDb().storage
+        .from(CONTENT_BUCKET)
+        .remove([`post/${input.id}.json`]);
+
+      if (error) throw new Error('Delete failed.');
+      return respond({ ok: true });
+    }
+
+    return respond({ error: 'Unknown editor action.' }, 400);
+  } catch (error) {
+    return respond({
+      error: error instanceof Error ? error.message : 'The operation failed.'
+    }, 400);
+  }
+}
