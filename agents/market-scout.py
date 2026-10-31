@@ -294,14 +294,20 @@ Be specific, data-driven, and focus on actionable insights. Use the findom niche
 
         try:
             message = self.client.messages.create(
-                model="claude-sonnet-5",
+                model="claude-sonnet-4-5",
                 max_tokens=2000,
                 messages=[
                     {"role": "user", "content": prompt}
                 ]
             )
 
-            return message.content[0].text
+            # Extract text from response, handling both TextBlock and ThinkingBlock
+            text_content = ""
+            for block in message.content:
+                if hasattr(block, 'text') and block.type == 'text':
+                    text_content += block.text
+
+            return text_content if text_content else self._generate_fallback_report(content_trends, pricing_trends)
         except Exception as e:
             print(f"Error generating report with Claude: {e}")
             return self._generate_fallback_report(content_trends, pricing_trends)

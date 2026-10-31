@@ -151,11 +151,16 @@ Generate ONE social media caption now:"""
 
     try:
         message = claude.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-4-5",
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}]
         )
-        return message.content[0].text.strip()
+        # Extract text from response, handling both TextBlock and ThinkingBlock
+        text_content = ""
+        for block in message.content:
+            if hasattr(block, 'text') and block.type == 'text':
+                text_content += block.text
+        return text_content.strip() if text_content else generate_template_content(persona_name, platform, theme)
     except Exception as e:
         print(f"Claude API error: {e}")
         return generate_template_content(persona_name, platform, theme)

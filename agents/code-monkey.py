@@ -147,14 +147,18 @@ Requirements:
 Return ONLY the script code, no explanations."""
 
         message = client.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-4-5",
             max_tokens=4000,
             messages=[
                 {"role": "user", "content": prompt}
             ]
         )
 
-        script_content = message.content[0].text
+        # Extract text from response, handling both TextBlock and ThinkingBlock
+        script_content = ""
+        for block in message.content:
+            if hasattr(block, 'text') and block.type == 'text':
+                script_content += block.text
 
         # Clean up markdown code blocks if present
         if script_content.startswith("```"):
@@ -197,14 +201,20 @@ Include:
 Format as clean Markdown."""
 
         message = client.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-4-5",
             max_tokens=4000,
             messages=[
                 {"role": "user", "content": prompt}
             ]
         )
 
-        return message.content[0].text, None
+        # Extract text from response, handling both TextBlock and ThinkingBlock
+        doc_content = ""
+        for block in message.content:
+            if hasattr(block, 'text') and block.type == 'text':
+                doc_content += block.text
+
+        return doc_content, None
     except Exception as e:
         logger.error(f"Documentation generation error: {e}")
         return None, str(e)
