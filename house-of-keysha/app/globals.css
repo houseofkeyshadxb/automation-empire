@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0A0608;
+  --foreground: #e8ddd0;
+  --burgundy: #6B1D2A;
+  --gold: #C9A84C;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-montserrat), sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), serif;
+  letter-spacing: 1px;
+}
+
+a {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
