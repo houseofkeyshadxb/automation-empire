@@ -100,20 +100,24 @@ export default function BeckyPage() {
             Gallery
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="relative h-96 overflow-hidden border-2 border-burgundy/50 hover:border-gold transition-all group"
-            >
-              <Image
-                src="/images/becky/becky-hero.jpg"
-                alt="Becky Gallery 1"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </motion.div>
-            {[2, 3, 4, 5].map((i) => (
+            {['/images/becky/becky-hero.jpg', '/images/becky/becky-gallery-1.jpg', '/images/becky/becky-gallery-2.jpg', '/images/becky/becky-gallery-3.png'].map((img, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="relative h-96 overflow-hidden border-2 border-burgundy/50 hover:border-gold transition-all group"
+              >
+                <Image
+                  src={img}
+                  alt={`Becky ${idx + 1}`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </motion.div>
+            ))}
+            {[5].map((i) => (
               <motion.div
                 key={`placeholder-${i}`}
                 initial={{ opacity: 0, y: 20 }}
