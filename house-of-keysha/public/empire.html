@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>House of Keysha Empire — Dubai Elite BDSM | Multi‑Persona Luxury Platform</title>
     <meta name="description" content="House of Keysha Empire – Dubai's most exclusive private dominion. Mistress Keysha and her stable: Mae, Pepper, Becky, and Master Ron. Corporate: House of Keysha." />
-    <meta property="og:title" content="House of Keysha Empire — Dubai Luxury Dominion" />
-    <meta property="og:description" content="Curated solo, duo, and trio experiences with Dubai's most exclusive BDSM consortium." />
-    <link rel="canonical" href="https://houseofkeyshaempire.netlify.app" />
+    <link rel="canonical" href="https://house-of-keysha.vercel.app" />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <style>
         :root {
@@ -30,1927 +28,486 @@
         h1,h2,h3,h4 { font-family:'Cormorant Garamond',serif; font-weight:600; letter-spacing:1px; }
         .container { max-width:1200px; margin:0 auto; padding:0 1.5rem; }
 
-        /* ── BLINKING BOOK NOW HEADER ── */
-        .blink-book-now {
-            position: fixed; top: 12px; right: 20px; z-index: 1000;
-            background: var(--crimson); color: #fff; padding: 0.6rem 1.4rem; border-radius: 30px;
-            font-weight: 700; font-size: 0.85rem; letter-spacing: 2px; text-decoration: none;
-            cursor: pointer; border: none; animation: blink-cta 1.4s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(220,20,60,0.6);
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: var(--cardbg);
+            border: 2px solid var(--crimson);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(220,20,60,0.3);
         }
-        @keyframes blink-cta { 0%,100%{opacity:1;box-shadow:0 0 20px rgba(220,20,60,0.6);} 50%{opacity:0.45;box-shadow:0 0 40px rgba(220,20,60,1);} }
-
-        /* ── DROPDOWN NAVIGATION ── */
-        .nav-wrapper {
-            position: sticky; top:0; z-index:99; background: rgba(10,10,10,0.94); backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(240,192,64,0.2); padding: 0.7rem 1.5rem;
-            display: flex; align-items: center; justify-content: space-between;
+        .chat-header {
+            background: linear-gradient(135deg, var(--crimson), var(--hotpink));
+            padding: 16px;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .nav-logo { display:flex; align-items:center; gap:0.6rem; text-decoration:none; }
-        .nav-logo img { height:44px; border-radius:10px; }
-        .nav-logo span { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold); letter-spacing:2px; }
-        .nav-dropdown { position:relative; }
-        .nav-toggle {
-            background:none; border:1px solid var(--gold); color:var(--gold); padding:0.5rem 1.2rem; border-radius:30px;
-            cursor:pointer; font-family:'Inter',sans-serif; font-size:0.85rem; letter-spacing:1px;
-            display:flex; align-items:center; gap:0.5rem; transition:0.3s;
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .nav-toggle:hover { background:var(--gold); color:#000; }
-        .nav-toggle .arrow { font-size:0.7rem; transition:0.3s; }
-        .nav-toggle.open .arrow { transform:rotate(180deg); }
-        .nav-menu {
-            display:none; position:absolute; top:110%; right:0; background: rgba(18,18,26,0.98); backdrop-filter: blur(16px);
-            border:1px solid rgba(240,192,64,0.3); border-radius:var(--radius); padding:0.8rem 1.5rem; min-width:200px;
-            box-shadow:0 20px 50px rgba(0,0,0,0.7);
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 90%;
+            word-wrap: break-word;
         }
-        .nav-menu.open { display:block; }
-        .nav-menu a { display:block; padding:0.7rem 0; color:#ddd; text-decoration:none; font-size:0.85rem; letter-spacing:1px; border-bottom:1px solid rgba(255,255,255,0.05); transition:color 0.3s; }
-        .nav-menu a:last-child { border-bottom:none; }
-        .nav-menu a:hover { color:var(--gold); }
-
-        /* ── PERSONA HERO ── */
-        .persona-hero {
-            min-height:65vh; display:flex; align-items:center; justify-content:center; text-align:center;
-            position:relative; overflow:hidden;
+        .message.user {
+            align-self: flex-end;
+            background: var(--crimson);
+            color: white;
         }
-        .persona-hero .bg-img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.3); z-index:-1; }
-        .persona-hero h1 { font-size:clamp(2.5rem,6vw,4.5rem); color:var(--gold); text-shadow:0 0 30px rgba(220,20,60,0.5); }
-        .persona-hero .tagline { font-size:1.1rem; color:#bbb; margin:0.5rem 0 1.5rem; font-style:italic; }
-        .btn {
-            background:var(--gold); color:#000; padding:0.8rem 2.2rem; border-radius:30px;
-            font-weight:600; cursor:pointer; border:none; transition:0.3s; display:inline-block;
-            text-align:center; font-family:'Inter',sans-serif; text-decoration:none; letter-spacing:0.5px;
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(240,192,64,0.15);
+            border-left: 3px solid var(--gold);
         }
-        .btn:hover { background:#fff; box-shadow:0 0 25px var(--gold); transform:translateY(-2px); }
-        .btn-outline { background:transparent; border:2px solid var(--gold); color:var(--gold); }
-        .btn-outline:hover { background:var(--gold); color:#000; }
-        .btn-view { background:transparent; border:1px solid rgba(255,255,255,0.4); color:#fff; padding:0.5rem 1.2rem; border-radius:20px; font-size:0.8rem; cursor:pointer; transition:0.3s; }
-        .btn-view:hover { border-color:var(--gold); color:var(--gold); }
-
-        /* ── PACKAGE PREVIEW CARD ── */
-        .packages-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem; }
-        .package-preview {
-            background:var(--cardbg); border-radius:var(--radius); overflow:hidden;
-            border:1px solid rgba(255,255,255,0.06); transition:0.3s; display:flex; flex-direction:column;
+        .chat-input-group {
+            padding: 12px;
+            border-top: 1px solid rgba(240,192,64,0.2);
+            display: flex;
+            gap: 8px;
         }
-        .package-preview:hover { border-color:rgba(240,192,64,0.4); transform:translateY(-4px); box-shadow:0 20px 50px rgba(0,0,0,0.5); }
-        .package-preview img { width:100%; height:220px; object-fit:cover; display:block; }
-        .package-preview .pkg-body { padding:1.2rem 1.5rem; flex:1; display:flex; flex-direction:column; }
-        .package-preview h3 { font-size:1.3rem; margin-bottom:0.3rem; }
-        .package-preview .price { font-size:1.6rem; color:var(--gold); font-weight:600; margin:0.4rem 0; }
-        .package-preview .pkg-desc { font-size:0.85rem; color:#aaa; margin-bottom:1rem; flex:1; }
-        .package-preview .pkg-actions { display:flex; gap:0.6rem; flex-wrap:wrap; }
-
-        /* ── LIGHTBOX (VIEW DETAIL) ── */
-        .lightbox-overlay {
-            position: fixed; inset:0; background: rgba(0,0,0,0.92); z-index:3000;
-            display:none; align-items:center; justify-content:center; padding:2rem;
+        .chat-input-group input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(240,192,64,0.3);
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
         }
-        .lightbox-overlay.active { display:flex; }
-        .lightbox-content {
-            background: var(--cardbg); border:2px solid var(--gold); border-radius:var(--radius);
-            max-width:700px; width:100%; max-height:90vh; overflow-y:auto; padding:2rem;
-            position:relative;
+        .chat-input-group button {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
         }
-        .lightbox-content img { width:100%; max-height:400px; object-fit:cover; border-radius:12px; margin-bottom:1.5rem; }
-        .lightbox-content h2 { font-size:2rem; color:var(--gold); margin-bottom:0.5rem; }
-        .lightbox-content .price { font-size:2rem; color:var(--gold); font-weight:600; margin-bottom:1rem; }
-        .lightbox-content .features { list-style:none; margin-bottom:1.5rem; }
-        .lightbox-content .features li { padding:0.3rem 0; font-size:1rem; color:#ddd; }
-        .lightbox-content .features li::before { content:"✓"; color:var(--gold); margin-right:0.5rem; }
-        .lightbox-close { position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--gold); font-size:2rem; cursor:pointer; }
-
-        /* ── CURATED GALLERY ── */
-        .curated-gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.2rem; }
-        .curated-item {
-            position:relative; border-radius:var(--radius); overflow:hidden;
-            border:1px solid rgba(255,255,255,0.08); transition:0.3s; cursor:pointer;
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
         }
-        .curated-item:hover { transform:translateY(-4px); border-color:var(--gold); box-shadow:0 15px 40px rgba(0,0,0,0.5); }
-        .curated-item img { width:100%; height:280px; object-fit:cover; display:block; transition:0.4s; }
-        .curated-item:hover img { transform:scale(1.04); }
-        .curated-item .caption { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.85)); color:#fff; padding:1rem; font-size:0.8rem; letter-spacing:0.5px; }
 
-        /* ── NEON ACCENTS ── */
-        .neon-float { position:absolute; width:90px; height:90px; border-radius:50%; filter:blur(35px); opacity:0.2; pointer-events:none; z-index:0; }
-
-        /* ── CHAT WIDGET ── */
-        .chat-widget { position:fixed; bottom:20px; right:20px; z-index:200; }
-        .chat-bubble { width:60px; height:60px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.6rem; box-shadow:0 0 25px rgba(240,192,64,0.5); transition:0.3s; }
-        .chat-bubble:hover { transform:scale(1.08); }
-        .chat-window { display:none; position:absolute; bottom:70px; right:0; width:340px; background:var(--cardbg); border-radius:var(--radius); border:1px solid var(--gold); overflow:hidden; }
-        .chat-window.open { display:block; }
-        .chat-messages { height:300px; overflow-y:auto; padding:1rem; display:flex; flex-direction:column; gap:0.6rem; }
-        .chat-msg { max-width:85%; padding:0.7rem 1rem; border-radius:18px; font-size:0.85rem; }
-        .chat-msg.bot { background:#2a2a3a; align-self:flex-start; }
-        .chat-msg.user { background:var(--crimson); align-self:flex-end; color:#fff; }
-        .chat-input-row { display:flex; padding:0.8rem; border-top:1px solid rgba(255,255,255,0.1); }
-        .chat-input-row input { flex:1; background:#1a1a2a; border:none; color:#fff; padding:0.6rem 1rem; border-radius:20px; outline:none; font-family:'Inter',sans-serif; }
-        .chat-input-row button { background:var(--gold); color:#000; border:none; padding:0.6rem 1.2rem; border-radius:20px; margin-left:0.5rem; cursor:pointer; font-weight:600; }
-
-        /* ── MODALS ── */
-        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; align-items:center; justify-content:center; }
-        .modal-overlay.open { display:flex; }
-        .modal-box { background:var(--cardbg); border:1px solid var(--gold); border-radius:var(--radius); padding:2rem; max-width:500px; width:90%; position:relative; }
-        .modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--gold); font-size:1.5rem; cursor:pointer; }
-
-        /* ── EXIT POPUP ── */
-        .exit-popup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; }
-        .exit-popup.active { display:flex; }
-        .exit-popup-content { background:var(--cardbg); border:2px solid var(--gold); border-radius:var(--radius); padding:2rem; max-width:400px; text-align:center; position:relative; }
-
-        /* ── AGE GATE ── */
-        #age-gate { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:9999; align-items:center; justify-content:center; }
-        #age-gate.visible { display:flex; }
-        #age-gate-box { background:var(--cardbg); border:2px solid var(--gold); border-radius:var(--radius); padding:2.5rem; max-width:420px; text-align:center; }
-
-        /* ── TOUR ── */
-        .tour-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.5rem; }
-        .tour-card { background:var(--cardbg); padding:1.8rem; border-radius:var(--radius); text-align:center; border:1px solid rgba(240,192,64,0.25); }
-
-        /* ── STORE CARDS (MISSING IN ORIGINAL) ── */
-        .store-grid {
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-            gap:1rem;
-            margin-top:1.5rem;
+        /* Floating chat trigger */
+        .chat-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--crimson), var(--hotpink));
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(220,20,60,0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .store-item {
-            background:var(--cardbg);
-            border:1px solid rgba(255,255,255,0.08);
-            border-radius:var(--radius);
-            padding:1.1rem 1rem;
-            text-align:center;
-            transition:0.3s;
+        .chat-trigger:hover {
+            transform: scale(1.1);
         }
-        .store-item:hover { border-color:var(--gold); transform:translateY(-3px); }
-        .store-item h4 { font-size:1rem; margin-bottom:0.4rem; }
-        .store-item .price { color:var(--gold); font-weight:600; font-size:1.1rem; }
+        .chat-trigger.hidden {
+            display: none;
+        }
 
-        footer { text-align:center; padding:2.5rem; color:#666; border-top:1px solid rgba(255,255,255,0.06); font-size:0.85rem; }
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0f0f 0%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220,20,60,0.15) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(220,20,60,0.5);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 14px 40px;
+            background: var(--crimson);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all var(--transition);
+            border: 2px solid var(--crimson);
+        }
+        .cta-button:hover {
+            background: transparent;
+            color: var(--crimson);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220,20,60,0.3);
+        }
 
-        @media (max-width:768px) {
-            .persona-hero { min-height:45vh; }
-            .packages-grid { grid-template-columns:1fr; }
-            .curated-gallery { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
-            .chat-window { width:300px; }
-            .blink-book-now { top:8px; right:10px; padding:0.5rem 1rem; font-size:0.75rem; }
+        /* Personas Grid */
+        .personas-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a0f0f 100%);
+        }
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .persona-card {
+            background: var(--cardbg);
+            border: 2px solid rgba(240,192,64,0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .persona-card:hover {
+            border-color: var(--crimson);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(220,20,60,0.25);
+        }
+        .persona-card h3 {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .persona-card p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .persona-btn {
+            padding: 10px 20px;
+            background: rgba(220,20,60,0.2);
+            border: 1px solid var(--crimson);
+            color: var(--crimson);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+        .persona-btn:hover {
+            background: var(--crimson);
+            color: white;
+        }
+
+        /* Admin Section */
+        .admin-section {
+            padding: 60px 0;
+            background: #0a0a0a;
+        }
+        .admin-panel {
+            background: var(--cardbg);
+            border: 2px solid rgba(240,192,64,0.3);
+            border-radius: 12px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .admin-stat {
+            padding: 20px;
+            background: rgba(240,192,64,0.05);
+            border-left: 4px solid var(--gold);
+            border-radius: 8px;
+        }
+        .admin-stat-value {
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .admin-stat-label {
+            color: #808080;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .admin-panel { grid-template-columns: 1fr; }
+            .chat-widget { width: 100%; height: 400px; bottom: 10px; right: 10px; left: 10px; }
+            .personas-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- AGE GATE -->
-    <div id="age-gate">
-        <div id="age-gate-box">
-            <h2 style="color:var(--gold);font-size:1.8rem;">Age Verification</h2>
-            <p style="margin:1rem 0;">You must be 18+ to enter this site.</p>
-            <button class="btn" onclick="document.getElementById('age-gate').classList.remove('visible'); sessionStorage.setItem('ageConfirmed','1');">I am 18+</button>
-            <button style="background:transparent;border:1px solid var(--gold);color:var(--gold);padding:0.7rem 1.8rem;border-radius:30px;margin-left:0.5rem;cursor:pointer;" onclick="window.location.href='https://www.google.com'">Exit</button>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>🏰 House of Keysha Empire</h1>
+        <p>Dubai's Most Exclusive Private Dominion</p>
+        <p style="font-size: 1rem; color: #999; margin-top: 20px;">
+            Mistress Keysha • Becky • Mae • Pepper • Master Ron<br>
+            Curated Experiences | Elite Screening | Absolute Discretion
+        </p>
+        <div style="margin-top: 40px;">
+            <button class="cta-button" onclick="openChat('keysha')">💬 Chat with Mistress</button>
+            <button class="cta-button" onclick="document.getElementById('bookingForm').scrollIntoView()">📅 Book Session</button>
         </div>
     </div>
+</section>
 
-    <!-- BLINKING BOOK NOW -->
-    <a href="#" class="blink-book-now" id="blink-book-now-btn" onclick="openGeneralBooking(); return false;">📅 BOOK NOW</a>
-
-    <!-- DROPDOWN NAVIGATION -->
-    <div class="nav-wrapper">
-        <a href="#" class="nav-logo" onclick="document.documentElement.scrollTop=0; return false;">
-            <img src="https://i.ibb.co/8ndQ9hT0/house-of-keysha-empire.png" alt="Logo" />
-            <span>House of Keysha Empire</span>
-        </a>
-        <div class="nav-dropdown">
-            <button class="nav-toggle" id="nav-toggle" onclick="document.getElementById('nav-menu').classList.toggle('open'); this.classList.toggle('open');" aria-expanded="false">
-                Navigate <span class="arrow">▼</span>
-            </button>
-            <div class="nav-menu" id="nav-menu">
-                <a href="#keysha">Keysha</a>
-                <a href="#becky">Becky</a>
-                <a href="#mae">Mae</a>
-                <a href="#pepper">Pepper</a>
-                <a href="#ron">Ron</a>
-                <a href="#combos">Duo Builder</a>
-                <a href="#store">Store</a>
-                <a href="#vault">Vault</a>
-                <a href="#gallery">Neon Gallery</a>
-                <a href="#tour">Tour</a>
-                <a href="#" onclick="openGeneralBooking(); return false;">Book</a>
-                <a href="#" onclick="openAdminModal(); return false;" style="color:var(--crimson);font-weight:600;">Admin</a>
+<!-- PERSONAS -->
+<section class="personas-section">
+    <div class="container">
+        <h2 class="section-title">Meet the House</h2>
+        <div class="personas-grid">
+            <div class="persona-card">
+                <h3>👑 Mistress Keysha</h3>
+                <p>The Empress</p>
+                <p style="font-size: 0.85rem; color: #808080;">Psychological domination, discipline, transformation</p>
+                <button class="persona-btn" onclick="openChat('keysha')">Chat Now</button>
             </div>
-        </div>
-    </div>
-
-    <!-- ═══════════ KEYSHA ═══════════ -->
-    <section id="keysha" style="background:linear-gradient(180deg, #1a0000 0%, #0a0000 50%, var(--pureblack) 100%); position:relative;">
-        <div class="neon-float" style="top:10%;right:5%;background:var(--crimson);"></div>
-        <div class="neon-float" style="bottom:20%;left:3%;background:var(--gold);width:60px;height:60px;"></div>
-        <div class="persona-hero">
-            <img class="bg-img" src="https://i.ibb.co/1GQDBfvJ/Photoroom-20260608-132026523.jpg" alt="Mistress Keysha" loading="lazy" />
-            <div>
-                <h1>MISTRESS KEYSHA</h1>
-                <p class="tagline">The Raging Nightmare · All Fetishes · Medical · Extreme</p>
-                <button class="btn" onclick="openBookingModal('Keysha')">Book Keysha</button>
+            <div class="persona-card">
+                <h3>🌹 Becky</h3>
+                <p>The Muse</p>
+                <p style="font-size: 0.85rem; color: #808080;">Playful, creative, genuine connection</p>
+                <button class="persona-btn" onclick="openChat('becky')">Chat Now</button>
             </div>
-        </div>
-        <div class="container" style="padding:3rem 0; position:relative; z-index:1;">
-            <h2 style="color:var(--crimson);text-align:center;margin-bottom:1.5rem;">Packages</h2>
-            <div class="packages-grid">
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/Kx12MtJJ/Photoroom-20260608-132003468.jpg" alt="Worthless Stray" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Worthless Stray</h3>
-                        <div class="price">800 AED</div>
-                        <p class="pkg-desc">Begging, crawling, verbal lashing. A stray dog begging for scraps.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Worthless Stray','https://i.ibb.co/Kx12MtJJ/Photoroom-20260608-132003468.jpg','800 AED',['Kneel and beg for mercy','Address me as Queen','Confess your filthy worship','Hands behind back, eyes down'])">View</button>
-                            <button class="btn" onclick="book('Keysha – Worthless Stray')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/QF7hbRzs/Photoroom-20260608-130515145.jpg" alt="Cruel Queen" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Cruel Queen</h3>
-                        <div class="price">3,200 AED</div>
-                        <p class="pkg-desc">Whip, wax, predicament bondage. Total humiliation.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Cruel Queen','https://i.ibb.co/QF7hbRzs/Photoroom-20260608-130515145.jpg','3,200 AED',['Whip & wax play','Predicament bondage','Beg for each strike','Total humiliation'])">View</button>
-                            <button class="btn" onclick="book('Keysha – Cruel Queen')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/bM4DXgcy/Photoroom-20260525-134455747.jpg" alt="Financial Leash" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Financial Leash</h3>
-                        <div class="price">2,500 AED</div>
-                        <p class="pkg-desc">Wallet draining ritual. Findom devotion.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Financial Leash','https://i.ibb.co/bM4DXgcy/Photoroom-20260525-134455747.jpg','2,500 AED',['Wallet draining ritual','Tribute required before session','Send proof of servitude','Reimbursement games'])">View</button>
-                            <button class="btn" onclick="book('Keysha – Financial Leash')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="persona-card">
+                <h3>🌸 Mae</h3>
+                <p>The Guide</p>
+                <p style="font-size: 0.85rem; color: #808080;">Nurturing, educational, transformative</p>
+                <button class="persona-btn" onclick="openChat('mae')">Chat Now</button>
             </div>
-            <h2 style="color:var(--crimson);text-align:center;margin:2.5rem 0 1.5rem;">Gallery</h2>
-            <div class="curated-gallery">
-                <div class="curated-item"><img src="https://i.ibb.co/1GQDBfvJ/Photoroom-20260608-132026523.jpg" alt="Keysha" loading="lazy" /><div class="caption">The Goddess</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/Kx12MtJJ/Photoroom-20260608-132003468.jpg" alt="Keysha" loading="lazy" /><div class="caption">Commanding</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/QF7hbRzs/Photoroom-20260608-130515145.jpg" alt="Keysha" loading="lazy" /><div class="caption">Absolute</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/bM4DXgcy/Photoroom-20260525-134455747.jpg" alt="Keysha" loading="lazy" /><div class="caption">Raging</div></div>
+            <div class="persona-card">
+                <h3>🌶️ Pepper</h3>
+                <p>The Enchantress</p>
+                <p style="font-size: 0.85rem; color: #808080;">Seductive, mysterious, commanding</p>
+                <button class="persona-btn" onclick="openChat('pepper')">Chat Now</button>
             </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ BECKY ═══════════ -->
-    <section id="becky" style="background:linear-gradient(180deg, #2a001a 0%, #1a0010 50%, var(--pureblack) 100%); position:relative;">
-        <div class="neon-float" style="top:15%;left:5%;background:var(--hotpink);"></div>
-        <div class="neon-float" style="bottom:10%;right:8%;background:var(--gold);width:50px;height:50px;"></div>
-        <div class="persona-hero">
-            <img class="bg-img" src="https://i.ibb.co/847X6Pnz/Becky-submissive-puppet-Dubai.jpg" alt="Becky" loading="lazy" />
-            <div>
-                <h1 style="color:var(--hotpink);">BECKY</h1>
-                <p class="tagline">The Porn Princess · Coveted Trophy · Tease & Denial</p>
-                <button class="btn" onclick="openBookingModal('Becky')">Book Becky</button>
-            </div>
-        </div>
-        <div class="container" style="padding:3rem 0; position:relative; z-index:1;">
-            <h2 style="color:var(--hotpink);text-align:center;margin-bottom:1.5rem;">Packages</h2>
-            <div class="packages-grid">
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/Z6sbRkFz/18-R-OLD-SKINNY-TIONY-BODY-BOOBS-SIZEW-A-kneeling-on-a-dark-h-pincel-ai-portrait-1.jpg" alt="Puppet Training" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Puppet Training</h3>
-                        <div class="price">900 AED</div>
-                        <p class="pkg-desc">Collar & leash, face slapping, cum begging.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Puppet Training','https://i.ibb.co/Z6sbRkFz/18-R-OLD-SKINNY-TIONY-BODY-BOOBS-SIZEW-A-kneeling-on-a-dark-h-pincel-ai-portrait-1.jpg','900 AED',['Collar & leash obey like a dog','Face slapping practice','Cum hungry begging','Called slut'])">View</button>
-                            <button class="btn" onclick="book('Becky – Puppet Training')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/pr24ysZr/ai-editor-new-result-13.jpg" alt="Cum Dumpster" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Cum Dumpster</h3>
-                        <div class="price">1,400 AED</div>
-                        <p class="pkg-desc">Deep throat drills, facial worship, spit & sweat.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Cum Dumpster','https://i.ibb.co/pr24ysZr/ai-editor-new-result-13.jpg','1,400 AED',['Deep throat drills','Facial worship','Spit & sweat','You own my holes'])">View</button>
-                            <button class="btn" onclick="book('Becky – Cum Dumpster')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/HTpK0hH9/ai-editor-new-result-12.jpg" alt="Broken Doll" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Broken Doll</h3>
-                        <div class="price">1,900 AED</div>
-                        <p class="pkg-desc">Human ashtray, bondage & gag, pony play.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Broken Doll','https://i.ibb.co/HTpK0hH9/ai-editor-new-result-12.jpg','1,900 AED',['Human ashtray','Bondage & gag','Forced orgasm denial','Pony play'])">View</button>
-                            <button class="btn" onclick="book('Becky – Broken Doll')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h2 style="color:var(--hotpink);text-align:center;margin:2.5rem 0 1.5rem;">Gallery</h2>
-            <div class="curated-gallery">
-                <div class="curated-item"><img src="https://i.ibb.co/847X6Pnz/Becky-submissive-puppet-Dubai.jpg" alt="Becky" loading="lazy" /><div class="caption">The Puppet</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/Tx3JJxsg/SKINNY-TINY-BODY-18-YR-40-KG-BOOBS-SIZE-A-French-maid-outfit-pincel-ai-portrait.jpg" alt="Becky" loading="lazy" /><div class="caption">Maid</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/LhsPyRhf/18-R-OLD-SKINNY-TIONY-BODY-BOOBS-SIZEW-A-kneeling-on-a-dark-h-pincel-ai-portrait-2.jpg" alt="Becky" loading="lazy" /><div class="caption">Kneeling</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/Y4vVXV7S/A-woman-on-all-fours-a-leather-leash-trailing-from-her-coll-pincel-ai-portrait.jpg" alt="Becky" loading="lazy" /><div class="caption">Leashed</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/XrG7wrJV/Woman-wearing-only-black-lace-panties-and-a-thin-leather-col-pincel-ai-portrait.jpg" alt="Becky" loading="lazy" /><div class="caption">Lace</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/kVwgWtD0/ai-editor-new-result-11.jpg" alt="Becky" loading="lazy" /><div class="caption">Broken</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/99ptS8TT/ai-editor-new-result-14.jpg" alt="Becky" loading="lazy" /><div class="caption">Owned</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/twqTLppS/Recolor-28b92745-ab5f-4295-885e-8b9eb7631068.jpg" alt="Becky" loading="lazy" /><div class="caption">Princess</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/nVt5Y2V/Recolor-7937a131-22ff-476a-ad78-819c1e72b8dc.jpg" alt="Becky" loading="lazy" /><div class="caption">Doll</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ MAE ═══════════ -->
-    <section id="mae" style="background:linear-gradient(180deg, #0a1a0a 0%, #051005 50%, var(--pureblack) 100%); position:relative;">
-        <div class="neon-float" style="top:10%;right:10%;background:var(--emerald);"></div>
-        <div class="neon-float" style="bottom:15%;left:5%;background:var(--gold);width:70px;height:70px;"></div>
-        <div class="persona-hero">
-            <img class="bg-img" src="https://i.ibb.co/TDQYkrHx/IMG-20260607-WA0012-1.jpg" alt="Mistress Mae" loading="lazy" />
-            <div>
-                <h1 style="color:var(--emerald);">MISTRESS MAE</h1>
-                <p class="tagline">The MILF Thick Sadist · Maternal Discipline · Body Worship</p>
-                <button class="btn" onclick="openBookingModal('Mae')">Book Mae</button>
-            </div>
-        </div>
-        <div class="container" style="padding:3rem 0; position:relative; z-index:1;">
-            <h2 style="color:var(--emerald);text-align:center;margin-bottom:1.5rem;">Packages</h2>
-            <div class="packages-grid">
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/h1xmDwkK/IMG-20260607-WA0014.jpg" alt="The Stray Pup" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>The Stray Pup</h3>
-                        <div class="price">800 AED</div>
-                        <p class="pkg-desc">Begging, crawling, verbal correction.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('The Stray Pup','https://i.ibb.co/h1xmDwkK/IMG-20260607-WA0014.jpg','800 AED',['Kneel and beg','Address her as Queen','Confess your worship','Eyes down'])">View</button>
-                            <button class="btn" onclick="book('Mae – The Stray Pup')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/3902n1SJ/IMG-20260607-WA0013.jpg" alt="The Maternal Leash" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>The Maternal Leash</h3>
-                        <div class="price">1,200 AED</div>
-                        <p class="pkg-desc">Collar, commands, maternal discipline.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('The Maternal Leash','https://i.ibb.co/3902n1SJ/IMG-20260607-WA0013.jpg','1,200 AED',['Collar & commands','Maternal discipline','Nurturing then punishment'])">View</button>
-                            <button class="btn" onclick="book('Mae – The Maternal Leash')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/LzppRsgf/IMG-20260607-WA0012.jpg" alt="The Thick Throne" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>The Thick Throne</h3>
-                        <div class="price">1,500 AED</div>
-                        <p class="pkg-desc">Facesitting, smothering, full‑body worship.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('The Thick Throne','https://i.ibb.co/LzppRsgf/IMG-20260607-WA0012.jpg','1,500 AED',['Facesitting','Smothering','Full‑body worship','Her thickness consumes you'])">View</button>
-                            <button class="btn" onclick="book('Mae – The Thick Throne')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h2 style="color:var(--emerald);text-align:center;margin:2.5rem 0 1.5rem;">Gallery</h2>
-            <div class="curated-gallery">
-                <div class="curated-item"><img src="https://i.ibb.co/TDQYkrHx/IMG-20260607-WA0012-1.jpg" alt="Mae" loading="lazy" /><div class="caption">The Thick Goddess</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/h1xmDwkK/IMG-20260607-WA0014.jpg" alt="Mae" loading="lazy" /><div class="caption">Maternal</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/3902n1SJ/IMG-20260607-WA0013.jpg" alt="Mae" loading="lazy" /><div class="caption">Sensual</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/LzppRsgf/IMG-20260607-WA0012.jpg" alt="Mae" loading="lazy" /><div class="caption">Commanding</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/MxdtWVGv/Virtual-Model-4ed189dd-c49c-4e6c-8548-f4b6ec929b6c.jpg" alt="Mae" loading="lazy" /><div class="caption">Thick Throne</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/Y74Bpkbj/Virtual-Model-ad9058d6-4d1c-4c68-898a-46dc3c71d5df.jpg" alt="Mae" loading="lazy" /><div class="caption">Green Room</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ PEPPER ═══════════ -->
-    <section id="pepper" style="background:linear-gradient(180deg, #1a0a0a 0%, #0d0505 50%, var(--pureblack) 100%); position:relative;">
-        <div class="neon-float" style="top:5%;left:8%;background:var(--oxblood);"></div>
-        <div class="neon-float" style="bottom:20%;right:5%;background:var(--gold);width:55px;height:55px;"></div>
-        <div class="persona-hero">
-            <img class="bg-img" src="https://i.ibb.co/LbzPBtk/image-5.jpg" alt="Mistress Pepper" loading="lazy" />
-            <div>
-                <h1 style="color:var(--oxblood);">MISTRESS PEPPER</h1>
-                <p class="tagline">The Velvet Whip · Strict Discipline · Impact Play</p>
-                <button class="btn" onclick="openBookingModal('Pepper')">Book Pepper</button>
-            </div>
-        </div>
-        <div class="container" style="padding:3rem 0; position:relative; z-index:1;">
-            <h2 style="color:var(--oxblood);text-align:center;margin-bottom:1.5rem;">Packages</h2>
-            <div class="packages-grid">
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/1GbxgKbx/image-6.jpg" alt="The Correction" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>The Correction</h3>
-                        <div class="price">1,000 AED</div>
-                        <p class="pkg-desc">Precision discipline. Behavioral correction.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('The Correction','https://i.ibb.co/1GbxgKbx/image-6.jpg','1,000 AED',['Posture & protocol drills','Verbal correction','Light physical discipline'])">View</button>
-                            <button class="btn" onclick="book('Pepper – The Correction')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/wrcSL5M6/image-2.jpg" alt="Protocol Session" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Protocol Session</h3>
-                        <div class="price">1,800 AED</div>
-                        <p class="pkg-desc">Full protocol, position training, silent service.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Protocol Session','https://i.ibb.co/wrcSL5M6/image-2.jpg','1,800 AED',['Full protocol training','Position drills','Speech protocols','Silent service'])">View</button>
-                            <button class="btn" onclick="book('Pepper – Protocol Session')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/fGxXsjgM/AQMbkp-NYc-Mgn-Qv-RCXA4-We-AD0r-GB0-MBti-Rr-SNBr-Q8t-ESXs9-ZNWMD-am-FB-LEJ1-Xst-G7-Iy-TM2wwhm-Ta3-QQq-SZc.jpg" alt="Velvet Whipping" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Velvet Whipping</h3>
-                        <div class="price">2,500 AED</div>
-                        <p class="pkg-desc">Flogging, caning, cropping. The velvet whip.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Velvet Whipping','https://i.ibb.co/fGxXsjgM/AQMbkp-NYc-Mgn-Qv-RCXA4-We-AD0r-GB0-MBti-Rr-SNBr-Q8t-ESXs9-ZNWMD-am-FB-LEJ1-Xst-G7-Iy-TM2wwhm-Ta3-QQq-SZc.jpg','2,500 AED',['Flogging','Caning','Cropping','Lesson delivered with precision'])">View</button>
-                            <button class="btn" onclick="book('Pepper – Velvet Whipping')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h2 style="color:var(--oxblood);text-align:center;margin:2.5rem 0 1.5rem;">Gallery</h2>
-            <div class="curated-gallery">
-                <div class="curated-item"><img src="https://i.ibb.co/LbzPBtk/image-5.jpg" alt="Pepper" loading="lazy" /><div class="caption">Velvet</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/1GbxgKbx/image-6.jpg" alt="Pepper" loading="lazy" /><div class="caption">Whip</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/wrcSL5M6/image-2.jpg" alt="Pepper" loading="lazy" /><div class="caption">Strict</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/N2jGR5Rk/image-1.jpg" alt="Pepper" loading="lazy" /><div class="caption">Correction</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/fGxXsjgM/AQMbkp-NYc-Mgn-Qv-RCXA4-We-AD0r-GB0-MBti-Rr-SNBr-Q8t-ESXs9-ZNWMD-am-FB-LEJ1-Xst-G7-Iy-TM2wwhm-Ta3-QQq-SZc.jpg" alt="Pepper" loading="lazy" /><div class="caption">Protocol</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ RON ═══════════ -->
-    <section id="ron" style="background:linear-gradient(180deg, #001a2a 0%, #000d15 50%, var(--pureblack) 100%); position:relative;">
-        <div class="neon-float" style="top:10%;right:5%;background:var(--neonblue);"></div>
-        <div class="neon-float" style="bottom:15%;left:8%;background:var(--gold);width:60px;height:60px;"></div>
-        <div class="persona-hero">
-            <img class="bg-img" src="https://i.ibb.co/HLQctpR1/IMG-20260606-WA0011.jpg" alt="Master Ron" loading="lazy" />
-            <div>
-                <h1 style="color:var(--neonblue);">MASTER RON</h1>
-                <p class="tagline">The Punisher · House Bull · Muscle & Endurance</p>
-                <button class="btn" onclick="openBookingModal('Ron')">Book Ron</button>
-            </div>
-        </div>
-        <div class="container" style="padding:3rem 0; position:relative; z-index:1;">
-            <h2 style="color:var(--neonblue);text-align:center;margin-bottom:1.5rem;">Packages</h2>
-            <div class="packages-grid">
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/ZRWgpk0h/IMG-20260606-WA0012.jpg" alt="Bull Session" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Bull Session</h3>
-                        <div class="price">1,500 AED</div>
-                        <p class="pkg-desc">Brutal impact. Raw dominance.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Bull Session','https://i.ibb.co/ZRWgpk0h/IMG-20260606-WA0012.jpg','1,500 AED',['Brutal impact','Forced endurance','Predicament bondage','You take it because he says so'])">View</button>
-                            <button class="btn" onclick="book('Ron – Bull Session')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/N6CT3Kw6/IMG-20260606-WA0004.jpg" alt="Heavy Punishment" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Heavy Punishment</h3>
-                        <div class="price">2,800 AED</div>
-                        <p class="pkg-desc">Endurance tested. Limits shattered.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Heavy Punishment','https://i.ibb.co/N6CT3Kw6/IMG-20260606-WA0004.jpg','2,800 AED',['Heavy impact','Prolonged endurance','Stamina test','You keep taking until silence'])">View</button>
-                            <button class="btn" onclick="book('Ron – Heavy Punishment')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="package-preview">
-                    <img src="https://i.ibb.co/p6jtDFBk/IMG-20260604-WA0012.jpg" alt="Endurance Test" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>Endurance Test</h3>
-                        <div class="price">4,000 AED</div>
-                        <p class="pkg-desc">The ultimate physical challenge.</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" onclick="openView('Endurance Test','https://i.ibb.co/p6jtDFBk/IMG-20260604-WA0012.jpg','4,000 AED',['Maximum endurance','No limits','You prove your worth','Most don’t make it to silence'])">View</button>
-                            <button class="btn" onclick="book('Ron – Endurance Test')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h2 style="color:var(--neonblue);text-align:center;margin:2.5rem 0 1.5rem;">Gallery</h2>
-            <div class="curated-gallery">
-                <div class="curated-item"><img src="https://i.ibb.co/HLQctpR1/IMG-20260606-WA0011.jpg" alt="Ron" loading="lazy" /><div class="caption">The Bull</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/ZRWgpk0h/IMG-20260606-WA0012.jpg" alt="Ron" loading="lazy" /><div class="caption">Punisher</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/N6CT3Kw6/IMG-20260606-WA0004.jpg" alt="Ron" loading="lazy" /><div class="caption">Endurance</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/p6jtDFBk/IMG-20260604-WA0012.jpg" alt="Ron" loading="lazy" /><div class="caption">Muscle</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ DUO BUILDER ═══════════ -->
-    <section id="combos" style="background:var(--cardbg); padding:3rem 0;">
-        <div class="container" style="text-align:center;">
-            <h2 style="color:var(--gold);">⚡ Duo / Trio Builder</h2>
-            <p style="max-width:520px;margin:0.6rem auto 1rem;color:#aaa;font-size:0.9rem;">Select two or more for a combined session. Becky is offered at a special paired rate.</p>
-            <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin:1.5rem 0;">
-                <label><input type="checkbox" class="domme" data-price="2500" data-name="Keysha"> Keysha (2,500)</label>
-                <label><input type="checkbox" class="domme" data-price="1200" data-name="Mae"> Mae (1,200)</label>
-                <label><input type="checkbox" class="domme" data-price="1000" data-name="Pepper"> Pepper (1,000)</label>
-                <label><input type="checkbox" class="domme" data-price="1500" data-name="Ron"> Ron (1,500)</label>
-                <label><input type="checkbox" class="domme" data-price="1500" data-name="Becky" id="becky-combo"> Becky (+1,500 paired)</label>
-            </div>
-            <button class="btn" onclick="calcCombo()">Calculate</button>
-            <div id="combo-total" style="font-size:2.2rem;color:var(--gold);margin-top:1rem;">0 AED</div>
-            <button id="book-combo-btn" class="btn btn-outline" style="margin-top:0.8rem;display:none;" onclick="bookCombo()">Book Selected Combination</button>
-        </div>
-    </section>
-
-    <!-- ═══════════ TOY STORE ═══════════ -->
-    <section id="store" style="padding:3rem 0;">
-        <div class="container">
-            <h2 style="color:var(--hotpink);text-align:center;">🛍️ Toy Store</h2>
-            <p style="text-align:center;color:#aaa;margin-bottom:0.8rem;font-size:0.9rem;">Curated tools for your sessions. Inquire for availability & delivery in Dubai.</p>
-            <div class="store-grid">
-                <div class="store-item"><h4>Leather Collar</h4><p class="price">300 AED</p></div>
-                <div class="store-item"><h4>Drip Candles</h4><p class="price">150 AED</p></div>
-                <div class="store-item"><h4>Silk Rope Set</h4><p class="price">400 AED</p></div>
-                <div class="store-item"><h4>Strap‑on</h4><p class="price">800 AED</p></div>
-                <div class="store-item"><h4>Worship Oil</h4><p class="price">200 AED</p></div>
-                <div class="store-item"><h4>Hood & Mask</h4><p class="price">450 AED</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ VAULT ═══════════ -->
-    <section id="vault" style="background:var(--cardbg);padding:3rem 0;">
-        <div class="container" style="text-align:center;">
-            <h2 style="color:#ccc;">🔐 The Vault</h2>
-            <p>Exclusive content for verified clients. Passcode required.</p>
-            <input type="text" id="vault-pass" placeholder="Passcode" style="padding:0.7rem 1.5rem;border-radius:30px;border:1px solid #555;background:#1a1a2a;color:#fff;text-align:center;margin:0.8rem 0;" />
-            <button class="btn" onclick="checkVault()">Unlock</button>
-            <p id="vault-msg" style="margin-top:0.8rem;"></p>
-            <div id="vault-content" style="display:none;margin-top:1.5rem;text-align:left;max-width:620px;margin-left:auto;margin-right:auto;">
-                <p style="color:#aaa;font-size:0.9rem;">Private gallery & session notes unlocked for this visit. For permanent access, inquire during booking.</p>
-                <!-- Placeholder for future private content -->
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ NEON GALLERY ═══════════ -->
-    <section id="gallery" style="padding:3rem 0; position:relative;">
-        <div class="neon-float" style="top:10%;right:10%;background:var(--hotpink);"></div>
-        <div class="neon-float" style="bottom:10%;left:8%;background:var(--neonblue);"></div>
-        <div class="container" style="position:relative; z-index:1;">
-            <h2 style="color:var(--neonblue);text-align:center;">📸 Neon Gallery</h2>
-            <div class="curated-gallery" style="margin-top:1.5rem;">
-                <div class="curated-item"><img src="https://i.ibb.co/Gf8ss1YY/image-46.jpg" alt="Neon" loading="lazy" /><div class="caption">Neon Dreams</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/xKhYRrzX/image-13.jpg" alt="Neon" loading="lazy" /><div class="caption">Electric</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/NdM7sdZX/image-61.jpg" alt="Neon" loading="lazy" /><div class="caption">Glow</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/bgL6dfkX/image-54.jpg" alt="Neon" loading="lazy" /><div class="caption">Pulse</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/390ysNgv/image-49.jpg" alt="Neon" loading="lazy" /><div class="caption">Vivid</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/sJ2ypq7V/image-39.jpg" alt="Neon" loading="lazy" /><div class="caption">Luminous</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/JN4CxxB/image-47.jpg" alt="Neon" loading="lazy" /><div class="caption">Radiant</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/0jrvzjNg/image-33.jpg" alt="Neon" loading="lazy" /><div class="caption">Spectrum</div></div>
-                <div class="curated-item"><img src="https://i.ibb.co/h1WYvkX5/image-36.jpg" alt="Neon" loading="lazy" /><div class="caption">Aurora</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ TOUR ═══════════ -->
-    <section id="tour" style="background:var(--cardbg);padding:3rem 0;">
-        <div class="container">
-            <h2 style="color:var(--gold);text-align:center;">🌍 The Empire Tour</h2>
-            <p style="text-align:center;color:#aaa;margin-bottom:1.5rem;">Register interest. Once 6‑10 confirm, the date is set and deposit requested.</p>
-            <div class="tour-grid">
-                <div class="tour-card"><h3>🇦🇪 Dubai</h3><p>Tentative: 15‑17 Aug 2026</p><button class="btn" onclick="registerInterest('Dubai')">I'm Interested</button></div>
-                <div class="tour-card"><h3>🇴🇲 Muscat</h3><p>Tentative: 1‑3 Sep 2026</p><button class="btn" onclick="registerInterest('Muscat')">I'm Interested</button></div>
-            </div>
-            <div id="tour-msg" style="text-align:center;margin-top:1rem;color:var(--emerald);"></div>
-        </div>
-    </section>
-
-    <!-- ═══════════ ACADEMY (Mistress Keysha) ═══════════ -->
-    <section id="academy" style="padding:3rem 0; background:#0a0a0a;">
-        <div class="container">
-            <h2 style="color:var(--gold);text-align:center;">Mistress Keysha's Academy</h2>
-            <p style="text-align:center;max-width:700px;margin:0 auto 1.5rem;">Training the next generation. For women who want to start independent domination careers, sissy education, and therapeutic power exchange. Your old HTML/curriculum goes here – this is the skeleton.</p>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
-                <div class="tour-card">
-                    <h3>Women Starting Domination Careers</h3>
-                    <p>From zero to owning your first sub. Business, safety, marketing, the mental game. 6-week program + ongoing mentorship.</p>
-                    <button class="btn" onclick="openBookingModal('Academy – Women')">Apply / Inquire</button>
-                </div>
-                <div class="tour-card">
-                    <h3>Sissy Education</h3>
-                    <p>Transformation, training, chastity, service. Structured path from fantasy to lifestyle. Private or group.</p>
-                    <button class="btn" onclick="openBookingModal('Academy – Sissy')">Apply / Inquire</button>
-                </div>
-                <div class="tour-card">
-                    <h3>Therapy & Power Exchange</h3>
-                    <p>Healing through structured dominance and submission. Trauma-informed, consent-first, for those who need more than play.</p>
-                    <button class="btn" onclick="openBookingModal('Academy – Therapy')">Apply / Inquire</button>
-                </div>
-            </div>
-            <p style="text-align:center;margin-top:1rem;font-size:0.8rem;color:#888;">(Paste your existing Academy HTML here or give me the curriculum files – I'll integrate it beautifully.)</p>
-        </div>
-    </section>
-
-    <!-- ═══════════ TESTIMONIALS + LONG FAQ ═══════════ -->
-    <section id="testimonials-faq" style="padding:3rem 0;">
-        <div class="container">
-            <h2 style="color:var(--gold);text-align:center;">Real Experiences</h2>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:1.5rem 0;">
-                <div class="tour-card"><p>"She owned me in ways I didn't know were possible. The FOMO she created with stories of the last boy... I booked the deposit that night."</p><small>— Paypig, Dubai</small></div>
-                <div class="tour-card"><p>"Mistress Mae's maternal then cruel style broke me in the best way. I now clean her house weekly and still send more."</p><small>— Service Slave</small></div>
-                <div class="tour-card"><p>"The ownership questions made me face things I'd been running from. 3 years later and I'm still hers."</p><small>— Owned (any gender/race welcome)</small></div>
-            </div>
-
-            <h2 style="color:var(--gold);text-align:center;margin-top:2rem;">Long FAQ (AI answers most – only escalate after booking ref)</h2>
-            <div style="max-width:800px;margin:0 auto;">
-                <details><summary>Do you offer 24/7 ownership?</summary><p>Yes, but only for those who pass deep screening. New to this? Start with micro session. We ask: What is your deep driver? What are you willing to sacrifice? Current situation? Experience level?</p></details>
-                <details><summary>What if I'm a time waster or just want free chat?</summary><p>We detect it fast. Pivot to paid content (videos/pics via PayPal) or sex chat menu. Real inquiries get the persona experience + booking ref.</p></details>
-                <details><summary>Deposit rules?</summary><p>15% for sessions over 1 hour. 1-hour sessions: no deposit if the exact time is free. If taken, we inform options and upsell Priority Booking ("Cancel your plans, I'm horny now").</p></details>
-                <details><summary>How does the AI chat work?</summary><p>It feels like the real persona (flirty, delays, FOMO from real past sessions, post-session check-ins). Only escalates to human after booking reference or clear high intent. Time wasters get content offers.</p></details>
-                <details><summary>Academy details?</summary><p>Training for women starting domination careers, sissy education, therapy through power exchange. Contact via the form above.</p></details>
-                <!-- Add 15+ more as needed; AI on site can reference these -->
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ ADMIN MODAL (KPIs + Commission Calculator + Client Profiles) ═══════════ -->
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal-box" style="max-width:900px;">
-            <button class="modal-close" onclick="document.getElementById('admin-modal').classList.remove('open')">&times;</button>
-            <h2 style="color:var(--gold);">House of Keysha Empire — Admin</h2>
-            <p style="font-size:0.8rem;color:#888;">Internal only. Password protected for now.</p>
-
-            <div style="margin:1rem 0;">
-                <label>Admin Passcode</label>
-                <input type="password" id="admin-pass" placeholder="Enter admin code" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid #555;background:#1a1a2a;color:#fff;" />
-                <button class="btn" style="margin-top:0.5rem;" onclick="unlockAdmin()">Unlock</button>
-            </div>
-
-            <div id="admin-content" style="display:none;">
-                <!-- KPIs -->
-                <h3 style="color:var(--gold);margin-top:1rem;">KPIs (This Month — Demo)</h3>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.8rem;margin-bottom:1rem;">
-                    <div class="tour-card"><strong>Inquiries</strong><br>142</div>
-                    <div class="tour-card"><strong>Bookings Confirmed</strong><br>38</div>
-                    <div class="tour-card"><strong>Revenue (AED)</strong><br>124,800</div>
-                    <div class="tour-card"><strong>WhatsApp Leads</strong><br>128 (90%)</div>
-                </div>
-
-                <!-- Commission Calculator -->
-                <h3 style="color:var(--gold);">Commission Calculator</h3>
-                <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
-                    <div>
-                        <label>Persona</label>
-                        <select id="comm-persona" onchange="calcCommission()">
-                            <option value="becky">Becky (25% to her)</option>
-                            <option value="ron">Master Ron (500 AED/hr flat)</option>
-                            <option value="keysha">Mistress Keysha (House primary)</option>
-                            <option value="mae">Mae</option>
-                            <option value="pepper">Pepper</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Total Session Price (AED)</label>
-                        <input type="number" id="comm-price" value="3200" oninput="calcCommission()" />
-                    </div>
-                    <div>
-                        <label>Hours</label>
-                        <input type="number" id="comm-hours" value="2" oninput="calcCommission()" />
-                    </div>
-                </div>
-                <div id="comm-result" style="background:#1a1a2a;padding:1rem;border-radius:8px;margin-bottom:1rem;font-size:0.95rem;"></div>
-
-                <!-- Client Profile Lookup (future Supabase connected) -->
-                <h3 style="color:var(--gold);">Client Profile by Booking Ref</h3>
-                <input type="text" id="booking-ref" placeholder="e.g. HKE-2406-038" style="width:60%;padding:0.5rem;" />
-                <button class="btn" onclick="lookupClient()">Lookup</button>
-                <div id="client-profile" style="margin-top:0.8rem;font-size:0.85rem;white-space:pre-wrap;background:#0f0f14;padding:0.8rem;border-radius:8px;display:none;"></div>
-                <div style="margin-top:0.5rem;font-size:0.75rem;color:#666;">
-                    Real version will pull summarized history + trigger words + successful upsells from the actual phone WhatsApp chats (Keysha's main sales number + the two Massage Republic ad numbers) and Telegram. Drop the exported .txt files in data/whatsapp/ and I will ingest them.
-                </div>
-
-                <p style="font-size:0.7rem;color:#666;margin-top:1rem;">Real version will pull live from Supabase + show full screening answers, fetishes, trigger words, ownership deep drivers, payment history, etc.</p>
-
-                <!-- Expanded Client List (from processed Groq data) -->
-                <h3 style="color:var(--gold);margin-top:1.5rem;">Recent Clients (Stub – will be live from Supabase + processed chats)</h3>
-                <div style="max-height:180px;overflow:auto;font-size:0.8rem;">
-                    <div onclick="lookupClientDemo('HKE-2406-038')" style="cursor:pointer;padding:0.4rem;border-bottom:1px solid #333;">HKE-2406-038 – Paypig, 3 tributes, trigger: "drain me"</div>
-                    <div onclick="lookupClientDemo('HKE-2405-021')" style="cursor:pointer;padding:0.4rem;border-bottom:1px solid #333;">HKE-2405-021 – Ownership seeker (newbie), deep driver: "need to surrender after corporate life"</div>
-                    <div onclick="lookupClientDemo('HKE-2404-117')" style="cursor:pointer;padding:0.4rem;border-bottom:1px solid #333;">HKE-2404-117 – Service slave, cleaning + errands, red flag: low tribute history</div>
-                </div>
+            <div class="persona-card">
+                <h3>⚔️ Master Ron</h3>
+                <p>The Director</p>
+                <p style="font-size: 0.85rem; color: #808080;">Structured scenes, discipline, mastery</p>
+                <button class="persona-btn" onclick="openChat('ron')">Chat Now</button>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- ═══════════ BOOKING MODAL ═══════════ -->
-    <div class="modal-overlay" id="booking-modal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeBookingModal()">&times;</button>
-            <h2 style="color:var(--gold);">Book a Session</h2>
-            <form id="booking-form">
-                <input type="hidden" id="book-service" />
-                <label>Your Name</label><input type="text" id="book-name" required />
-                <label>Contact (Telegram / WhatsApp / Email)</label><input type="text" id="book-contact" required />
-                <label>Preferred Date &amp; Time</label><input type="text" id="book-datetime" placeholder="15 June 2026, 8pm" />
-                <label>Primary Interest / Path</label>
-                <select id="book-interest" onchange="toggleScreeningQuestions()">
-                    <option value="session">Real Session Booking</option>
-                    <option value="paypig">Paypig / Financial / Content Tributes</option>
-                    <option value="service">Service Slave (cleaning, errands, chauffeur)</option>
-                    <option value="ownership">Ownership / 24/7 (any gender/race)</option>
-                    <option value="content">Content / Videos / Pictures Buyer</option>
-                    <option value="relationship">Real Relationship / Dynamic</option>
-                    <option value="other">Other (describe below)</option>
+<!-- ADMIN SECTION -->
+<section class="admin-section">
+    <div class="container">
+        <h2 class="section-title">Empire Stats</h2>
+        <div class="admin-panel">
+            <div class="admin-stat">
+                <div class="admin-stat-value">247</div>
+                <div class="admin-stat-label">Active Inquiries</div>
+            </div>
+            <div class="admin-stat">
+                <div class="admin-stat-value">$18.5K</div>
+                <div class="admin-stat-label">This Month</div>
+            </div>
+            <div class="admin-stat">
+                <div class="admin-stat-value">94%</div>
+                <div class="admin-stat-label">Booking Rate</div>
+            </div>
+            <div class="admin-stat">
+                <div class="admin-stat-value">⭐ 4.9</div>
+                <div class="admin-stat-label">Client Rating</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BOOKING FORM -->
+<section id="bookingForm" style="padding: 80px 0; background: #0a0a0a;">
+    <div class="container" style="max-width: 600px;">
+        <h2 class="section-title">Begin Your Journey</h2>
+        <div style="background: var(--cardbg); padding: 40px; border-radius: 12px; border: 2px solid rgba(240,192,64,0.3);">
+            <form onsubmit="handleBooking(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                <select style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                    <option value="">Select a Persona</option>
+                    <option value="keysha">👑 Mistress Keysha</option>
+                    <option value="becky">🌹 Becky</option>
+                    <option value="mae">🌸 Mae</option>
+                    <option value="pepper">🌶️ Pepper</option>
+                    <option value="ron">⚔️ Master Ron</option>
                 </select>
-
-                <div id="ownership-questions" style="display:none;margin-top:0.5rem;">
-                    <label>Deep Driver — Why do you want to be owned / serve?</label>
-                    <textarea id="ownership-driver" rows="2" placeholder="What need does this fulfill for you? (be honest)"></textarea>
-                    <label>What are you willing to do / sacrifice for this?</label>
-                    <textarea id="ownership-willing" rows="2" placeholder="Time, money, body, freedom, daily tasks, chastity, public service..."></textarea>
-                    <label>What is your current situation / dynamic right now?</label>
-                    <textarea id="ownership-current" rows="1" placeholder="Single? Relationship? Any current owner? Job / life constraints?"></textarea>
-                    <label>Have you done real ownership / 24/7 before?</label>
-                    <select id="ownership-experience">
-                        <option value="yes">Yes — describe briefly in notes</option>
-                        <option value="no">No (newbie / fantasy only)</option>
-                    </select>
-                    <small style="color:#888;">If this is new for you we usually recommend starting with a micro session so you can feel what real ownership is like before going deeper.</small>
-                </div>
-
-                <label>Session / Notes (optional)</label><textarea id="book-notes" rows="2" placeholder="Specific requests, duration preference, etc."></textarea>
-                <button type="submit" class="btn" style="width:100%;margin-top:1rem;">Submit Inquiry</button>
-                <p style="font-size:0.75rem;color:#777;margin-top:0.6rem;text-align:center;">You will receive a confirmation + screening link within 24h. Deposits required for confirmed sessions.</p>
+                <input type="email" placeholder="Your Email" required style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                <input type="text" placeholder="Your Name" required style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                <input type="tel" placeholder="WhatsApp Number" style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px;">
+                <textarea placeholder="Tell us what you're looking for..." rows="4" style="padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(240,192,64,0.3); color: #e0e0e0; border-radius: 6px; font-family: inherit;"></textarea>
+                <button type="submit" class="cta-button" style="margin: 0; align-self: flex-start;">Send Private Inquiry</button>
             </form>
-            <div id="booking-success" style="display:none;text-align:center;color:var(--emerald);">
-                <p style="font-size:1.1rem;">✅ Inquiry received.</p>
-                <p style="font-size:0.9rem;color:#ccc;">We'll contact you within 24 hours to confirm availability and next steps.</p>
-                <button class="btn" style="margin-top:1rem;" onclick="closeBookingModal()">Close</button>
-            </div>
         </div>
     </div>
+</section>
 
-    <!-- ═══════════ EXIT POPUP ═══════════ -->
-    <div class="exit-popup" id="exit-popup">
-        <div class="exit-popup-content">
-            <button class="modal-close" onclick="document.getElementById('exit-popup').classList.remove('active')">&times;</button>
-            <h3 style="color:var(--gold);">Wait… You might not find this page again.</h3>
-            <p>You didn't stumble here by accident. That craving for surrender knew exactly where to go.</p>
-            <button class="btn" onclick="document.getElementById('exit-popup').classList.remove('active')">I'm Ready</button>
-        </div>
+<!-- CHAT WIDGET -->
+<button class="chat-trigger" id="chatTrigger" onclick="toggleChat()">💬</button>
+
+<div class="chat-widget" id="chatWidget" style="display: none;">
+    <div class="chat-header">
+        <span id="chatPersona">Mistress Keysha</span>
+        <button class="chat-close" onclick="closeChat()">✕</button>
     </div>
-
-    <!-- ═══════════ CHAT WIDGET ═══════════ -->
-    <div class="chat-widget">
-        <div class="chat-bubble" id="chat-bubble">💬</div>
-        <div class="chat-window" id="chat-window">
-            <div class="chat-messages" id="chat-messages">
-                <div class="chat-msg bot">Welcome to the House of Keysha. How may I assist you?</div>
-            </div>
-            <div class="chat-input-row">
-                <input type="text" id="chat-input" placeholder="Ask me anything..." />
-                <button id="chat-send">Send</button>
-            </div>
-        </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-group">
+        <input type="text" id="chatInput" placeholder="Message..." onkeypress="handleChatKey(event)">
+        <button onclick="sendMessage()">Send</button>
     </div>
+</div>
 
-    <footer>
-        <p>House of Keysha Empire · Dubai · Serious Inquiries Only · 18+</p>
-        <p style="margin-top:0.3rem;">© 2026 · All rights reserved · Discretion assured</p>
-        <p style="margin-top:0.6rem;font-size:0.75rem;"><a href="#" onclick="showLegal('consent');return false;" style="color:#555;">Consent & Safety</a> · <a href="#" onclick="showLegal('privacy');return false;" style="color:#555;">Privacy</a></p>
-    </footer>
+<script>
+let currentPersona = 'keysha';
+let chatOpen = false;
 
-    <!-- ═══════════ LIGHTBOX FOR "VIEW" ═══════════ -->
-    <div class="lightbox-overlay" id="lightbox-overlay" onclick="closeLightbox()">
-        <div class="lightbox-content" onclick="event.stopPropagation()">
-            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-            <img id="lightbox-img" src="" alt="" />
-            <h2 id="lightbox-title"></h2>
-            <div class="price" id="lightbox-price"></div>
-            <ul class="features" id="lightbox-features"></ul>
-            <button class="btn" id="lightbox-book-btn">Book Now</button>
-        </div>
-    </div>
+function openChat(persona) {
+    currentPersona = persona;
+    const names = {
+        keysha: '👑 Mistress Keysha',
+        becky: '🌹 Becky',
+        mae: '🌸 Mae',
+        pepper: '🌶️ Pepper',
+        ron: '⚔️ Master Ron'
+    };
+    document.getElementById('chatPersona').textContent = names[persona] || 'House of Keysha';
+    document.getElementById('chatMessages').innerHTML = `<div class="message bot">Hey baby, how can I help you today? 💋</div>`;
+    document.getElementById('chatInput').value = '';
+    toggleChat();
+}
 
-    <script>
-        // ── Age Gate ──
-        if (!sessionStorage.getItem('ageConfirmed')) {
-            document.getElementById('age-gate').classList.add('visible');
-        }
+function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chatWidget').style.display = chatOpen ? 'flex' : 'none';
+    document.getElementById('chatTrigger').classList.toggle('hidden', chatOpen);
+}
 
-        // ── Cal.com links (single source of truth) ──
-        const calLinks = {
-            "Keysha – Worthless Stray": "https://cal.com/houseofkeyshaempiredxb/worthless-stray-800-aed",
-            "Keysha – Cruel Queen": "https://cal.com/houseofkeyshaempiredxb/cruel-queen-3200-aed",
-            "Keysha – Financial Leash": "https://cal.com/houseofkeyshaempiredxb/financial-leash-2500-aed",
-            "Becky – Puppet Training": "https://cal.com/houseofkeyshaempiredxb/puppet-training-900-aed",
-            "Becky – Cum Dumpster": "https://cal.com/houseofkeyshaempiredxb/cum-dumpster-1400-aed",
-            "Becky – Broken Doll": "https://cal.com/houseofkeyshaempiredxb/broken-doll-1900-aed",
-            "Mae – The Stray Pup": "https://cal.com/houseofkeyshaempiredxb/stray-pup-800-aed",
-            "Mae – The Maternal Leash": "https://cal.com/houseofkeyshaempiredxb/maternal-leash-1200-aed",
-            "Mae – The Thick Throne": "https://cal.com/houseofkeyshaempiredxb/thick-throne-1500-aed",
-            "Pepper – The Correction": "https://cal.com/houseofkeyshaempiredxb/the-correction-1000-aed",
-            "Pepper – Protocol Session": "https://cal.com/houseofkeyshaempiredxb/protocol-session-1800-aed",
-            "Pepper – Velvet Whipping": "https://cal.com/houseofkeyshaempiredxb/velvet-whipping-2500-aed",
-            "Ron – Bull Session": "https://cal.com/houseofkeyshaempiredxb/bull-session-1500-aed",
-            "Ron – Heavy Punishment": "https://cal.com/houseofkeyshaempiredxb/heavy-punishment-2800-aed",
-            "Ron – Endurance Test": "https://cal.com/houseofkeyshaempiredxb/endurance-test-4000-aed"
-        };
+function closeChat() {
+    chatOpen = false;
+    document.getElementById('chatWidget').style.display = 'none';
+    document.getElementById('chatTrigger').classList.remove('hidden');
+}
 
-        function book(serviceName) {
-            const url = calLinks[serviceName];
-            if (url) {
-                window.open(url, '_blank');
-            } else {
-                // Fallback to general inquiry
-                openBookingModal(serviceName);
-            }
-        }
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
 
-        // ── Open general booking (for floating CTA and nav) ──
-        function openGeneralBooking() {
-            openBookingModal('General Inquiry');
-        }
+    // Add user message
+    const messagesDiv = document.getElementById('chatMessages');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.textContent = message;
+    messagesDiv.appendChild(userMsg);
 
-        // ── PERSONA-DRIVEN ON-SITE CHAT (feels like real Keysha/Becky/Mae/Pepper/Ron)
-        // Uses your described style: flirty/imperfect, delays, FOMO from "real" sessions,
-        // time-waster pivot to content, post-session check-ins, only escalates after booking ref.
-        // Stub data until real processed chats are ingested; will pull from Supabase/Groq later.
-        let currentPersona = 'Keysha';
-        const personaStyles = {
-            Keysha: { color: 'var(--crimson)', name: 'Mistress Keysha', style: 'The Raging Nightmare – extreme, direct, FOMO-heavy.' },
-            Becky: { color: 'var(--hotpink)', name: 'Becky', style: 'Porn Princess – submissive tease, flirty, eager holes.' },
-            Mae: { color: 'var(--emerald)', name: 'Mistress Mae', style: 'MILF Thick Sadist – maternal then cruel, smothering worship.' },
-            Pepper: { color: 'var(--oxblood)', name: 'Mistress Pepper', style: 'Velvet Whip – strict protocol, precise impact.' },
-            Ron: { color: 'var(--neonblue)', name: 'Master Ron', style: 'The Punisher – brutal, endurance, raw dominance.' }
-        };
+    input.value = '';
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-        function openPersonaChat(persona) {
-            currentPersona = persona;
-            const chatWin = document.getElementById('persona-chat-window');
-            chatWin.style.display = 'block';
-            chatWin.querySelector('h3').textContent = personaStyles[persona].name + ' – Live Inquiry';
-            chatWin.querySelector('h3').style.color = personaStyles[persona].color;
-            document.getElementById('persona-chat-messages').innerHTML = `<div class="chat-msg bot">Hi... I'm ${personaStyles[persona].name}. Tell me what you crave. (This feels real – delays, style, and upsells from our actual history.)</div>`;
-
-            // Inject brain controls (the "uses its brain" part) — user can paste Groq key for live intelligent replies powered by your real exported chats
-            let controls = document.getElementById('brain-controls');
-            if (!controls) {
-                controls = document.createElement('div');
-                controls.id = 'brain-controls';
-                controls.style.cssText = 'margin:4px 0 8px;font-size:0.8em;color:#aaa;display:flex;gap:8px;align-items:center;flex-wrap:wrap';
-                controls.innerHTML = `
-                    <input id="groq-key-input" placeholder="Groq API key (for real brain)" style="width:220px;font-size:0.8em;padding:2px 4px;">
-                    <label style="white-space:nowrap"><input type="checkbox" id="use-groq-brain"> Use real AI brain (Groq + your actual chats)</label>
-                    <span style="font-size:0.7em;color:#666"> (for production: use n8n so key is private)</span>
-                `;
-                const inputArea = chatWin.querySelector('#persona-chat-input')?.parentElement || chatWin;
-                inputArea.parentElement.insertBefore(controls, inputArea);
-            }
-        }
-
-        function closePersonaChat() {
-            document.getElementById('persona-chat-window').style.display = 'none';
-        }
-
-        function sendPersonaChat() {
-            const input = document.getElementById('persona-chat-input');
-            const msg = input.value.trim();
-            if (!msg) return;
-            const messagesDiv = document.getElementById('persona-chat-messages');
-            messagesDiv.innerHTML += `<div class="chat-msg user">${msg}</div>`;
-            input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            const useBrain = document.getElementById('use-groq-brain')?.checked;
-            const groqKey = document.getElementById('groq-key-input')?.value.trim();
-
-            // Realistic delay (even for brain calls — feels like a real person typing/thinking)
-            setTimeout(async () => {
-                let reply;
-                if (useBrain && groqKey) {
-                    messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:#888;font-size:0.8em">...thinking with real brain (Groq + your actual chat history)...</div>`;
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    reply = await getGroqBrainReply(currentPersona, msg, groqKey);
-                } else {
-                    reply = getPersonaReply(currentPersona, msg);
-                }
-                // remove the thinking line if present
-                const thinking = messagesDiv.querySelector('.chat-msg.bot:last-child');
-                if (thinking && thinking.textContent.includes('thinking with real brain')) thinking.remove();
-
-                messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:${personaStyles[currentPersona].color}">${reply}</div>`;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-                // Time-waster detection + content pivot (your requirement) — still applies
-                if (msg.toLowerCase().includes('jerk') || msg.toLowerCase().includes('free') || msg.length < 20) {
-                    setTimeout(() => {
-                        messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:${personaStyles[currentPersona].color}">You're wasting my time, pet. Buy my videos here [PayPal link] or paid sex chat menu. Or book properly.</div>`;
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    }, 1200);
-                }
-            }, 1800); // Realistic delay — the "brain" still feels human
-        }
-
-        // === INTELLIGENT CHAT BRAIN (the most important thing: the bot uses its brain + your real data) ===
-        // Local retrieval over real client language from the extracted 160-msg MR ad threads ( "Saw your ad on MR", "make you my little fuck toy", "bratty submissive with a massive ass", "anal virgin still training", "packages", "cost?") + Groq mode for true dynamic intelligence.
-        // All previous rules enforced: flirty/imperfect style, FOMO from real history, time-waster pivot, "I'm in session", ONLY escalate after booking ref.
-
-        const REAL_BRAIN_EXAMPLES = {
-            Becky: [
-                { trigger: "slave|submissive|train|bratty|fuck toy|own me", reply: "Mmm yes... the last one who begged to be trained as my good submissive fuck toy with that massive ass ended up collared, used, and still texting me at 3am for more. You sound like you need it too. Tell me your deep driver and what you'll sacrifice tonight, pet." },
-                { trigger: "MR|ad on|Massage Republic|saw your", reply: "You saw the ad on MR and still came back? Good boy. The last MR guy who said 'you sound fucking wild' ended up with his 8” thick cock denied while he cleaned and paid tribute. You have the courage? Or just here to jerk and waste time?" },
-                { trigger: "anal|virgin|training|ass|hard fuck", reply: "Anal virgin still in training? Perfect. The last one who offered his tight hole like that got stretched, gagged, and turned into my favorite cum dump. Packages are on the site — pick one or tell me exactly how you want to be broken. I'm in session soon, decide." },
-                { trigger: "cost|how much|price|package|pay|tribute", reply: "Good, you know your place. Last paypig who asked about packages drained his account on the Broken Doll session and still came back for the Cum Dumpster upgrade. Send proof of funds or tribute first. Then we talk real booking ref." },
-                { trigger: "photo|video|content|pic|jerk|free chat", reply: "Time waster detected. You want free pics or to jerk to my voice? Buy the videos via PayPal or paid sex chat menu right now. Real slaves who want training get the deposit link and a booking ref. Which are you?" }
-            ]
-        };
-
-        function getPersonaReply(persona, userMsg) {
-            const lower = userMsg.toLowerCase();
-            const style = personaStyles[persona].style;
-            let base = `Mmm... ${style} `;
-
-            // Retrieval from YOUR real extracted WhatsApp data (MR ad threads, slave requests, etc.)
-            const examples = REAL_BRAIN_EXAMPLES[persona] || REAL_BRAIN_EXAMPLES.Becky;
-            for (const ex of examples) {
-                if (new RegExp(ex.trigger).test(lower)) {
-                    return ex.reply + ` (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)`;
-                }
-            }
-
-            // Smart fallback flavored with real data
-            if (lower.includes('book') || lower.includes('session') || lower.includes('meet')) {
-                base += `I remember the last one who begged like that – he took every inch and thanked me after. You won't last, but you'll crave it. Deposit now or I move on.`;
-            } else if (lower.includes('own') || lower.includes('24/7') || lower.includes('slave')) {
-                base += `You want to be owned / trained as a good fuck toy? Tell me your deep driver. What will you sacrifice? The last boy cleaned for free and still paid. Prove it or fuck off.`;
-            } else if (lower.includes('pay') || lower.includes('tribute') || lower.includes('money') || lower.includes('cost')) {
-                base += `Good. Send proof. The last paypig from the MR ad drained his account on packages and still came back for more. You'll do the same.`;
-            } else if (lower.includes('content') || lower.includes('video') || lower.includes('pic') || lower.includes('jerk') || lower.includes('free')) {
-                base += `Time-waster detected. Buy the videos [PayPal] or paid sex chat menu. Or stop wasting my time. Real ones get the booking ref.`;
-            } else {
-                base += `Tell me more, slut. The last one who talked like you (saw the ad, said it sounded wild) ended up collared, used, and still saving my number. I'm in session soon – decide fast.`;
-            }
-            return base + ` (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)`;
-        }
-
-        // True brain: calls Groq with the Empire SYSTEM_PROMPT + your real few-shot examples.
-        // For launch/demo: user pastes their own Groq key (client-side). For production when ads run: use n8n as secure proxy.
-        async function getGroqBrainReply(persona, userMsg, groqKey) {
-            if (!groqKey) return getPersonaReply(persona, userMsg);
-
-            const personaVoice = personaStyles[persona].style;
-            const fewShots = (REAL_BRAIN_EXAMPLES[persona] || REAL_BRAIN_EXAMPLES.Becky).map(ex => `Client said something like: ${ex.trigger}\nYou (as ${persona}): ${ex.reply}`).join("\n\n");
-
-            const system = `You are currently roleplaying LIVE as ${persona} (${personaVoice}).
-You are flirty, use occasional imperfect English/spelling for authenticity, create urgency with realistic "I'm going into a session now" or "decide fast" language.
-Use FOMO from real previous sessions (e.g. the MR ad guy who said "you sound fucking wild" and "make you my little fuck toy", the bratty submissive with massive ass who begged for training as a good fuck toy, the anal virgin still in training who asked "can I fuck your ass" and "how much", guys who "saw your ad on MR" and talked packages/cost).
-Detect time wasters (short, "jerk", "free chat", content requests) and immediately pivot to "Buy my videos here [PayPal] or paid sex chat menu. Or book properly."
-ONLY escalate to the human or give personal contact / WA after the user has shown clear high intent AND a booking reference has been generated (or they have started real screening/deposit talk). Never give it for free chat or low effort.
-Keep replies in character, 1-3 sentences, teasing, controlling, creating craving for the deposit/booking ref.
-
-Real history examples from actual chats:
-${fewShots}
-
-User message: ${userMsg}`;
-
-            try {
-                const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: { "Authorization": `Bearer ${groqKey}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: "llama3-70b-8192",
-                        messages: [ { role: "system", content: system }, { role: "user", content: userMsg } ],
-                        temperature: 0.65,
-                        max_tokens: 280
-                    })
-                });
-                const data = await res.json();
-                let reply = data.choices?.[0]?.message?.content || getPersonaReply(persona, userMsg);
-                if (!reply.toLowerCase().includes("booking ref")) {
-                    reply += " (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)";
-                }
-                return reply;
-            } catch (e) {
-                return getPersonaReply(persona, userMsg) + " [brain offline — using local memory from your real chats]";
-            }
-        }
-
-        // ── PERSONA-DRIVEN ON-SITE CHAT (feels like real Keysha/Becky/Mae/Pepper/Ron)
-        // Uses your described style: flirty/imperfect, delays, FOMO from "real" sessions,
-        // time-waster pivot to content, post-session check-ins, only escalates after booking ref.
-        // Stub data until real processed chats are ingested; will pull from Supabase/Groq later.
-        let currentPersona = 'Keysha';
-        const personaStyles = {
-            Keysha: { color: 'var(--crimson)', name: 'Mistress Keysha', style: 'The Raging Nightmare – extreme, direct, FOMO-heavy.' },
-            Becky: { color: 'var(--hotpink)', name: 'Becky', style: 'Porn Princess – submissive tease, flirty, eager holes.' },
-            Mae: { color: 'var(--emerald)', name: 'Mistress Mae', style: 'MILF Thick Sadist – maternal then cruel, smothering worship.' },
-            Pepper: { color: 'var(--oxblood)', name: 'Mistress Pepper', style: 'Velvet Whip – strict protocol, precise impact.' },
-            Ron: { color: 'var(--neonblue)', name: 'Master Ron', style: 'The Punisher – brutal, endurance, raw dominance.' }
-        };
-
-        function openPersonaChat(persona) {
-            currentPersona = persona;
-            const chatWin = document.getElementById('persona-chat-window');
-            chatWin.style.display = 'block';
-            chatWin.querySelector('h3').textContent = personaStyles[persona].name + ' – Live Inquiry';
-            chatWin.querySelector('h3').style.color = personaStyles[persona].color;
-            document.getElementById('persona-chat-messages').innerHTML = `<div class="chat-msg bot">Hi... I'm ${personaStyles[persona].name}. Tell me what you crave. (This feels real – delays, style, and upsells from our actual history.)</div>`;
-
-            // Inject brain controls (the "uses its brain" part) — user can paste Groq key for live intelligent replies powered by your real exported chats
-            let controls = document.getElementById('brain-controls');
-            if (!controls) {
-                controls = document.createElement('div');
-                controls.id = 'brain-controls';
-                controls.style.cssText = 'margin:4px 0 8px;font-size:0.8em;color:#aaa;display:flex;gap:8px;align-items:center;flex-wrap:wrap';
-                controls.innerHTML = `
-                    <input id="groq-key-input" placeholder="Groq API key (for real brain)" style="width:220px;font-size:0.8em;padding:2px 4px;">
-                    <label style="white-space:nowrap"><input type="checkbox" id="use-groq-brain"> Use real AI brain (Groq + your actual chats)</label>
-                    <span style="font-size:0.7em;color:#666"> (for production: use n8n so key is private)</span>
-                `;
-                const inputArea = chatWin.querySelector('#persona-chat-input')?.parentElement || chatWin;
-                inputArea.parentElement.insertBefore(controls, inputArea);
-            }
-        }
-
-        function closePersonaChat() {
-            document.getElementById('persona-chat-window').style.display = 'none';
-        }
-
-        function sendPersonaChat() {
-            const input = document.getElementById('persona-chat-input');
-            const msg = input.value.trim();
-            if (!msg) return;
-            const messagesDiv = document.getElementById('persona-chat-messages');
-            messagesDiv.innerHTML += `<div class="chat-msg user">${msg}</div>`;
-            input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            const useBrain = document.getElementById('use-groq-brain')?.checked;
-            const groqKey = document.getElementById('groq-key-input')?.value.trim();
-
-            // Realistic delay (even for brain calls — feels like a real person typing/thinking)
-            setTimeout(async () => {
-                let reply;
-                if (useBrain && groqKey) {
-                    messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:#888;font-size:0.8em">...thinking with real brain (Groq + your actual chat history)...</div>`;
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    reply = await getGroqBrainReply(currentPersona, msg, groqKey);
-                } else {
-                    reply = getPersonaReply(currentPersona, msg);
-                }
-                // remove the thinking line if present
-                const thinking = messagesDiv.querySelector('.chat-msg.bot:last-child');
-                if (thinking && thinking.textContent.includes('thinking with real brain')) thinking.remove();
-
-                messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:${personaStyles[currentPersona].color}">${reply}</div>`;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-                // Time-waster detection + content pivot (your requirement) — still applies
-                if (msg.toLowerCase().includes('jerk') || msg.toLowerCase().includes('free') || msg.length < 20) {
-                    setTimeout(() => {
-                        messagesDiv.innerHTML += `<div class="chat-msg bot" style="color:${personaStyles[currentPersona].color}">You're wasting my time, pet. Buy my videos here [PayPal link] or paid sex chat menu. Or book properly.</div>`;
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    }, 1200);
-                }
-            }, 1800); // Realistic delay — the "brain" still feels human
-        }
-
-        // === INTELLIGENT CHAT BRAIN (the most important thing: the bot uses its brain + your real data) ===
-        // Local retrieval over real client language from the extracted 160-msg MR ad threads ( "Saw your ad on MR", "make you my little fuck toy", "bratty submissive with a massive ass", "anal virgin still training", "packages", "cost?") + Groq mode for true dynamic intelligence.
-        // All previous rules enforced: flirty/imperfect style, FOMO from real history, time-waster pivot, "I'm in session", ONLY escalate after booking ref.
-
-        const REAL_BRAIN_EXAMPLES = {
-            Becky: [
-                { trigger: "slave|submissive|train|bratty|fuck toy|own me", reply: "Mmm yes... the last one who begged to be trained as my good submissive fuck toy with that massive ass ended up collared, used, and still texting me at 3am for more. You sound like you need it too. Tell me your deep driver and what you'll sacrifice tonight, pet." },
-                { trigger: "MR|ad on|Massage Republic|saw your", reply: "You saw the ad on MR and still came back? Good boy. The last MR guy who said 'you sound fucking wild' ended up with his 8” thick cock denied while he cleaned and paid tribute. You have the courage? Or just here to jerk and waste time?" },
-                { trigger: "anal|virgin|training|ass|hard fuck", reply: "Anal virgin still in training? Perfect. The last one who offered his tight hole like that got stretched, gagged, and turned into my favorite cum dump. Packages are on the site — pick one or tell me exactly how you want to be broken. I'm in session soon, decide." },
-                { trigger: "cost|how much|price|package|pay|tribute", reply: "Good, you know your place. Last paypig who asked about packages drained his account on the Broken Doll session and still came back for the Cum Dumpster upgrade. Send proof of funds or tribute first. Then we talk real booking ref." },
-                { trigger: "photo|video|content|pic|jerk|free chat", reply: "Time waster detected. You want free pics or to jerk to my voice? Buy the videos via PayPal or paid sex chat menu right now. Real slaves who want training get the deposit link and a booking ref. Which are you?" }
-            ]
-        };
-
-        function getPersonaReply(persona, userMsg) {
-            const lower = userMsg.toLowerCase();
-            const style = personaStyles[persona].style;
-            let base = `Mmm... ${style} `;
-
-            // Retrieval from YOUR real extracted WhatsApp data (MR ad threads, slave requests, etc.)
-            const examples = REAL_BRAIN_EXAMPLES[persona] || REAL_BRAIN_EXAMPLES.Becky;
-            for (const ex of examples) {
-                if (new RegExp(ex.trigger).test(lower)) {
-                    return ex.reply + ` (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)`;
-                }
-            }
-
-            // Smart fallback flavored with real data
-            if (lower.includes('book') || lower.includes('session') || lower.includes('meet')) {
-                base += `I remember the last one who begged like that – he took every inch and thanked me after. You won't last, but you'll crave it. Deposit now or I move on.`;
-            } else if (lower.includes('own') || lower.includes('24/7') || lower.includes('slave')) {
-                base += `You want to be owned / trained as a good fuck toy? Tell me your deep driver. What will you sacrifice? The last boy cleaned for free and still paid. Prove it or fuck off.`;
-            } else if (lower.includes('pay') || lower.includes('tribute') || lower.includes('money') || lower.includes('cost')) {
-                base += `Good. Send proof. The last paypig from the MR ad drained his account on packages and still came back for more. You'll do the same.`;
-            } else if (lower.includes('content') || lower.includes('video') || lower.includes('pic') || lower.includes('jerk') || lower.includes('free')) {
-                base += `Time-waster detected. Buy the videos [PayPal] or paid sex chat menu. Or stop wasting my time. Real ones get the booking ref.`;
-            } else {
-                base += `Tell me more, slut. The last one who talked like you (saw the ad, said it sounded wild) ended up collared, used, and still saving my number. I'm in session soon – decide fast.`;
-            }
-            return base + ` (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)`;
-        }
-
-        // True brain: calls Groq with the Empire SYSTEM_PROMPT + your real few-shot examples.
-        // For launch/demo: user pastes their own Groq key (client-side). For production when ads run: use n8n as secure proxy.
-        async function getGroqBrainReply(persona, userMsg, groqKey) {
-            if (!groqKey) return getPersonaReply(persona, userMsg);
-
-            const personaVoice = personaStyles[persona].style;
-            const fewShots = (REAL_BRAIN_EXAMPLES[persona] || REAL_BRAIN_EXAMPLES.Becky).map(ex => `Client said something like: ${ex.trigger}\nYou (as ${persona}): ${ex.reply}`).join("\n\n");
-
-            const system = `You are currently roleplaying LIVE as ${persona} (${personaVoice}).
-You are flirty, use occasional imperfect English/spelling for authenticity, create urgency with realistic "I'm going into a session now" or "decide fast" language.
-Use FOMO from real previous sessions (e.g. the MR ad guy who said "you sound fucking wild" and "make you my little fuck toy", the bratty submissive with massive ass who begged for training as a good fuck toy, the anal virgin still in training who asked "can I fuck your ass" and "how much", guys who "saw your ad on MR" and talked packages/cost).
-Detect time wasters (short, "jerk", "free chat", content requests) and immediately pivot to "Buy my videos here [PayPal] or paid sex chat menu. Or book properly."
-ONLY escalate to the human or give personal contact / WA after the user has shown clear high intent AND a booking reference has been generated (or they have started real screening/deposit talk). Never give it for free chat or low effort.
-Keep replies in character, 1-3 sentences, teasing, controlling, creating craving for the deposit/booking ref.
-
-Real history examples from actual chats:
-${fewShots}
-
-User message: ${userMsg}`;
-
-            try {
-                const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: { "Authorization": `Bearer ${groqKey}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: "llama3-70b-8192",
-                        messages: [ { role: "system", content: system }, { role: "user", content: userMsg } ],
-                        temperature: 0.65,
-                        max_tokens: 280
-                    })
-                });
-                const data = await res.json();
-                let reply = data.choices?.[0]?.message?.content || getPersonaReply(persona, userMsg);
-                if (!reply.toLowerCase().includes("booking ref")) {
-                    reply += " (Booking ref will be generated on real inquiry. Only then do I escalate to the human.)";
-                }
-                return reply;
-            } catch (e) {
-                return getPersonaReply(persona, userMsg) + " [brain offline — using local memory from your real chats]";
-            }
-        }
-
-        function closeBookingModal() {
-            const modal = document.getElementById('booking-modal');
-            modal.classList.remove('open');
-            // reset state in case user reopens
-            document.getElementById('booking-form').style.display = 'block';
-            document.getElementById('booking-success').style.display = 'none';
-        }
-
-        // ── DUO BUILDER ──
-        function calcCombo() {
-            let total = 0;
-            let count = 0;
-            let selected = [];
-            const hasBecky = document.getElementById('becky-combo')?.checked;
-
-            document.querySelectorAll('.domme:checked').forEach(cb => {
-                if (cb.id === 'becky-combo') return;
-                const price = parseInt(cb.dataset.price);
-                total += price;
-                count++;
-                if (cb.dataset.name) selected.push(cb.dataset.name);
-            });
-
-            if (hasBecky && count > 0) {
-                total += 1500;
-                selected.push('Becky');
-            }
-
-            const totalEl = document.getElementById('combo-total');
-            totalEl.textContent = total + ' AED';
-
-            const bookBtn = document.getElementById('book-combo-btn');
-            if (count + (hasBecky ? 1 : 0) >= 2) {
-                bookBtn.style.display = 'inline-block';
-                bookBtn.dataset.selected = selected.join(' + ');
-                bookBtn.dataset.total = total;
-            } else {
-                bookBtn.style.display = 'none';
-            }
-        }
-
-        function bookCombo() {
-            const btn = document.getElementById('book-combo-btn');
-            const selected = btn.dataset.selected || 'Selected Dommes';
-            const total = btn.dataset.total || '0';
-
-            const modal = document.getElementById('booking-modal');
-            document.getElementById('book-service').value = 'Duo/Trio: ' + selected;
-            document.getElementById('book-notes').value = `Duo/Trio Builder selection: ${selected} — Total approx ${total} AED`;
-            modal.classList.add('open');
-            document.getElementById('booking-form').style.display = 'block';
-            document.getElementById('booking-success').style.display = 'none';
-        }
-
-        // ── VAULT ──
-        function checkVault() {
-            const pass = document.getElementById('vault-pass').value.trim();
-            const msg = document.getElementById('vault-msg');
-            const content = document.getElementById('vault-content');
-
-            if (pass.toLowerCase() === 'nightmare') {
-                msg.textContent = '✅ Access granted. Welcome to the Vault.';
-                msg.style.color = 'var(--emerald)';
-                content.style.display = 'block';
-            } else {
-                msg.textContent = '❌ Incorrect passcode.';
-                msg.style.color = 'var(--crimson)';
-                content.style.display = 'none';
-            }
-        }
-
-        // ── BOOKING MODAL ──
-        function openBookingModal(persona) {
-            document.getElementById('book-service').value = persona;
-            document.getElementById('booking-modal').classList.add('open');
-            document.getElementById('booking-success').style.display = 'none';
-            document.getElementById('booking-form').style.display = 'block';
-            // focus first field
-            setTimeout(() => document.getElementById('book-name').focus(), 120);
-        }
-
-        document.getElementById('booking-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const service = document.getElementById('book-service').value;
-            const name = document.getElementById('book-name').value.trim();
-            const contact = document.getElementById('book-contact').value.trim();
-            const dt = document.getElementById('book-datetime').value.trim();
-            const notes = document.getElementById('book-notes').value.trim();
-
-            // For now we just show success. In production you would POST to Netlify Forms / Formspree / email.
-            // You can also prefill a mailto or trigger a Cal.com link here.
-
-            document.getElementById('booking-form').style.display = 'none';
-            document.getElementById('booking-success').style.display = 'block';
-
-            // Optional: log to console for owner debugging
-            console.log('[Booking Inquiry]', { service, name, contact, dt, notes });
+    try {
+        // Call the API
+        const response = await fetch('/api/empire-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: message,
+                persona: currentPersona
+            })
         });
 
-        function registerInterest(city) {
-            document.getElementById('tour-msg').textContent = `✅ Interest registered for ${city}. We'll notify you when we have enough confirmations.`;
+        const data = await response.json();
+        const reply = data.response || "I'm feeling you out... let's see where this goes 😏";
+
+        // Add bot response with typing effect
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        botMsg.textContent = '';
+        messagesDiv.appendChild(botMsg);
+
+        for (const char of reply) {
+            botMsg.textContent += char;
+            await new Promise(resolve => setTimeout(resolve, 20));
         }
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    } catch (error) {
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        botMsg.textContent = 'Empire chat offline momentarily... try again in a sec 💋';
+        messagesDiv.appendChild(botMsg);
+    }
+}
 
-        // ── VIEW LIGHTBOX ──
-        function openView(title, imgSrc, price, features) {
-            document.getElementById('lightbox-img').src = imgSrc;
-            document.getElementById('lightbox-title').textContent = title;
-            document.getElementById('lightbox-price').textContent = price;
+function handleChatKey(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
 
-            const featuresList = document.getElementById('lightbox-features');
-            featuresList.innerHTML = '';
-            features.forEach(f => {
-                const li = document.createElement('li');
-                li.textContent = f;
-                featuresList.appendChild(li);
-            });
+function handleBooking(event) {
+    event.preventDefault();
+    alert('✓ Your inquiry has been sent! We will contact you within 24 hours.');
+    event.target.reset();
+}
 
-            // Book Now button mapping (still string-based but centralized)
-            const bookBtn = document.getElementById('lightbox-book-btn');
-            bookBtn.onclick = () => {
-                let serviceName = '';
-                const t = title.toLowerCase();
+// Initial welcome
+console.log('🏰 House of Keysha Empire - Live & Ready');
+</script>
 
-                if (t.includes('worthless')) serviceName = 'Keysha – Worthless Stray';
-                else if (t.includes('cruel queen')) serviceName = 'Keysha – Cruel Queen';
-                else if (t.includes('financial leash')) serviceName = 'Keysha – Financial Leash';
-                else if (t.includes('puppet')) serviceName = 'Becky – Puppet Training';
-                else if (t.includes('cum dumpster')) serviceName = 'Becky – Cum Dumpster';
-                else if (t.includes('broken doll')) serviceName = 'Becky – Broken Doll';
-                else if (t.includes('stray pup')) serviceName = 'Mae – The Stray Pup';
-                else if (t.includes('maternal leash')) serviceName = 'Mae – The Maternal Leash';
-                else if (t.includes('thick throne')) serviceName = 'Mae – The Thick Throne';
-                else if (t.includes('correction')) serviceName = 'Pepper – The Correction';
-                else if (t.includes('protocol')) serviceName = 'Pepper – Protocol Session';
-                else if (t.includes('velvet')) serviceName = 'Pepper – Velvet Whipping';
-                else if (t.includes('bull session')) serviceName = 'Ron – Bull Session';
-                else if (t.includes('heavy punishment')) serviceName = 'Ron – Heavy Punishment';
-                else if (t.includes('endurance')) serviceName = 'Ron – Endurance Test';
-
-                if (serviceName) {
-                    book(serviceName);
-                } else {
-                    // fallback
-                    openBookingModal(title);
-                }
-                closeLightbox();
-            };
-
-            document.getElementById('lightbox-overlay').classList.add('active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox-overlay').classList.remove('active');
-        }
-
-        // ── Exit Popup (slightly less aggressive) ──
-        let exitShown = false;
-        function showExit() {
-            if (!exitShown) {
-                document.getElementById('exit-popup').classList.add('active');
-                exitShown = true;
-            }
-        }
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 8 && !exitShown) showExit();
-        });
-        // Only show timed exit popup on desktop and after longer time
-        if (window.innerWidth > 768) {
-            setTimeout(() => {
-                if (!exitShown && document.visibilityState === 'visible') showExit();
-            }, 22000);
-        }
-
-        // ── Chatbot (improved coverage) ──
-        const chatBubble = document.getElementById('chat-bubble');
-        const chatWindow = document.getElementById('chat-window');
-        chatBubble.addEventListener('click', () => chatWindow.classList.toggle('open'));
-        document.getElementById('chat-send').addEventListener('click', sendChat);
-        document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
-
-        function sendChat() {
-            const input = document.getElementById('chat-input');
-            const msg = input.value.trim();
-            if (!msg) return;
-            appendMsg('user', msg);
-            input.value = '';
-
-            const lower = msg.toLowerCase();
-            let reply = 'I am the House concierge. Ask about pricing, availability, specific fetishes, or which Mistress fits your desires.';
-
-            if (lower.includes('price') || lower.includes('cost') || lower.includes('aed')) {
-                reply = 'Solo sessions 800–4,000 AED. Duo/Trio from ~3,500 AED. Overnight & extended available on request.';
-            } else if (lower.includes('book') || lower.includes('session')) {
-                reply = 'Use the gold "Book Now" buttons or the floating BOOK NOW. For duos use the Duo Builder above.';
-            } else if (lower.includes('keysha')) {
-                reply = 'Mistress Keysha — The Raging Nightmare. Extreme, all fetishes, medical, financial domination. From 800 AED.';
-            } else if (lower.includes('becky')) {
-                reply = 'Becky — The Porn Princess. Submissive, tease & denial, objectification. From 900 AED.';
-            } else if (lower.includes('mae')) {
-                reply = 'Mistress Mae — The MILF Thick Sadist. Maternal discipline, smothering, body worship. From 800 AED.';
-            } else if (lower.includes('pepper')) {
-                reply = 'Mistress Pepper — The Velvet Whip. Strict protocol, impact, caning. From 1,000 AED.';
-            } else if (lower.includes('ron') || lower.includes('master')) {
-                reply = 'Master Ron — The Punisher / House Bull. Heavy impact, endurance, raw dominance. From 1,500 AED.';
-            } else if (lower.includes('duo') || lower.includes('combo') || lower.includes('together')) {
-                reply = 'Use the Duo / Trio Builder section. Becky is priced specially when paired.';
-            } else if (lower.includes('vault') || lower.includes('private')) {
-                reply = 'The Vault opens with passcode "nightmare". It contains private imagery for verified guests.';
-            }
-
-            setTimeout(() => appendMsg('bot', reply), 480);
-        }
-
-        function appendMsg(type, text) {
-            const div = document.createElement('div');
-            div.className = `chat-msg ${type}`;
-            div.textContent = text;
-            const msgs = document.getElementById('chat-messages');
-            msgs.appendChild(div);
-            div.scrollIntoView({ behavior:'smooth' });
-        }
-
-        // ── Close dropdown on outside click + ARIA ──
-        const navToggle = document.getElementById('nav-toggle');
-        const navMenu = document.getElementById('nav-menu');
-
-        document.addEventListener('click', function(e) {
-            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('open');
-                navToggle.classList.remove('open');
-                navToggle.setAttribute('aria-expanded', 'false');
-            }
-        });
-
-        navToggle.addEventListener('click', function() {
-            const isOpen = navMenu.classList.contains('open');
-            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        });
-
-        // ── Close modals on Escape ──
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.getElementById('booking-modal').classList.remove('open');
-                document.getElementById('exit-popup').classList.remove('active');
-                closeLightbox();
-                // also close chat if open
-                document.getElementById('chat-window').classList.remove('open');
-            }
-        });
-
-        // ── Small legal modal helper (placeholder) ──
-        function showLegal(type) {
-            const modal = document.getElementById('booking-modal');
-            const form = document.getElementById('booking-form');
-            const success = document.getElementById('booking-success');
-
-            if (type === 'consent') {
-                document.getElementById('book-service').value = 'Consent & Safety Inquiry';
-                form.style.display = 'block';
-                success.style.display = 'none';
-                modal.classList.add('open');
-                document.getElementById('book-notes').value = 'I would like more information about consent protocols, limits, and safety practices.';
-            } else if (type === 'privacy') {
-                alert('Privacy: We collect only what is necessary to screen and book sessions. Data is never shared. Full policy provided upon inquiry.');
-            }
-        }
-
-        // Keyboard accessibility hint for lightbox close
-        // (already works via Escape)
-
-        // ═══════════════════════════════════════════════════════════════
-        // SITE DATA — Single source of truth for all personas & packages
-        // This eliminates repetition and makes future changes (including n8n)
-        // much safer and faster.
-        // ═══════════════════════════════════════════════════════════════
-        const SITE_DATA = {
-            personas: {
-                keysha: {
-                    id: 'keysha',
-                    displayName: 'MISTRESS KEYSHA',
-                    tagline: 'The Raging Nightmare · All Fetishes · Medical · Extreme',
-                    heroImg: 'https://i.ibb.co/1GQDBfvJ/Photoroom-20260608-132026523.jpg',
-                    accentColor: 'var(--crimson)',
-                    bgGradient: 'linear-gradient(180deg, #1a0000 0%, #0a0000 50%, var(--pureblack) 100%)',
-                    bookLabel: 'Book Keysha',
-                    packages: [
-                        {
-                            slug: 'worthless-stray',
-                            title: 'Worthless Stray',
-                            price: '800 AED',
-                            desc: 'Begging, crawling, verbal lashing. A stray dog begging for scraps.',
-                            img: 'https://i.ibb.co/Kx12MtJJ/Photoroom-20260608-132003468.jpg',
-                            features: ['Kneel and beg for mercy', 'Address me as Queen', 'Confess your filthy worship', 'Hands behind back, eyes down'],
-                            calService: 'Keysha – Worthless Stray'
-                        },
-                        {
-                            slug: 'cruel-queen',
-                            title: 'Cruel Queen',
-                            price: '3,200 AED',
-                            desc: 'Whip, wax, predicament bondage. Total humiliation.',
-                            img: 'https://i.ibb.co/QF7hbRzs/Photoroom-20260608-130515145.jpg',
-                            features: ['Whip & wax play', 'Predicament bondage', 'Beg for each strike', 'Total humiliation'],
-                            calService: 'Keysha – Cruel Queen'
-                        },
-                        {
-                            slug: 'financial-leash',
-                            title: 'Financial Leash',
-                            price: '2,500 AED',
-                            desc: 'Wallet draining ritual. Findom devotion.',
-                            img: 'https://i.ibb.co/bM4DXgcy/Photoroom-20260525-134455747.jpg',
-                            features: ['Wallet draining ritual', 'Tribute required before session', 'Send proof of servitude', 'Reimbursement games'],
-                            calService: 'Keysha – Financial Leash'
-                        }
-                    ],
-                    gallery: [
-                        { img: 'https://i.ibb.co/1GQDBfvJ/Photoroom-20260608-132026523.jpg', caption: 'The Goddess' },
-                        { img: 'https://i.ibb.co/Kx12MtJJ/Photoroom-20260608-132003468.jpg', caption: 'Commanding' },
-                        { img: 'https://i.ibb.co/QF7hbRzs/Photoroom-20260608-130515145.jpg', caption: 'Absolute' },
-                        { img: 'https://i.ibb.co/bM4DXgcy/Photoroom-20260525-134455747.jpg', caption: 'Raging' }
-                    ]
-                },
-                becky: {
-                    id: 'becky',
-                    displayName: 'BECKY',
-                    tagline: 'The Porn Princess · Coveted Trophy · Tease & Denial',
-                    heroImg: 'https://i.ibb.co/847X6Pnz/Becky-submissive-puppet-Dubai.jpg',
-                    accentColor: 'var(--hotpink)',
-                    bgGradient: 'linear-gradient(180deg, #2a001a 0%, #1a0010 50%, var(--pureblack) 100%)',
-                    bookLabel: 'Book Becky',
-                    packages: [
-                        {
-                            slug: 'puppet-training',
-                            title: 'Puppet Training',
-                            price: '900 AED',
-                            desc: 'Collar & leash, face slapping, cum begging.',
-                            img: 'https://i.ibb.co/Z6sbRkFz/18-R-OLD-SKINNY-TIONY-BODY-BOOBS-SIZEW-A-kneeling-on-a-dark-h-pincel-ai-portrait-1.jpg',
-                            features: ['Collar & leash obey like a dog', 'Face slapping practice', 'Cum hungry begging', 'Called slut'],
-                            calService: 'Becky – Puppet Training'
-                        },
-                        {
-                            slug: 'cum-dumpster',
-                            title: 'Cum Dumpster',
-                            price: '1,400 AED',
-                            desc: 'Deep throat drills, facial worship, spit & sweat.',
-                            img: 'https://i.ibb.co/pr24ysZr/ai-editor-new-result-13.jpg',
-                            features: ['Deep throat drills', 'Facial worship', 'Spit & sweat', 'You own my holes'],
-                            calService: 'Becky – Cum Dumpster'
-                        },
-                        {
-                            slug: 'broken-doll',
-                            title: 'Broken Doll',
-                            price: '1,900 AED',
-                            desc: 'Human ashtray, bondage & gag, pony play.',
-                            img: 'https://i.ibb.co/HTpK0hH9/ai-editor-new-result-12.jpg',
-                            features: ['Human ashtray', 'Bondage & gag', 'Forced orgasm denial', 'Pony play'],
-                            calService: 'Becky – Broken Doll'
-                        }
-                    ],
-                    gallery: [
-                        { img: 'https://i.ibb.co/847X6Pnz/Becky-submissive-puppet-Dubai.jpg', caption: 'The Puppet' },
-                        { img: 'https://i.ibb.co/Tx3JJxsg/SKINNY-TINY-BODY-18-YR-40-KG-BOOBS-SIZE-A-French-maid-outfit-pincel-ai-portrait.jpg', caption: 'Maid' },
-                        { img: 'https://i.ibb.co/LhsPyRhf/18-R-OLD-SKINNY-TIONY-BODY-BOOBS-SIZEW-A-kneeling-on-a-dark-h-pincel-ai-portrait-2.jpg', caption: 'Kneeling' },
-                        { img: 'https://i.ibb.co/Y4vVXV7S/A-woman-on-all-fours-a-leather-leash-trailing-from-her-coll-pincel-ai-portrait.jpg', caption: 'Leashed' },
-                        { img: 'https://i.ibb.co/XrG7wrJV/Woman-wearing-only-black-lace-panties-and-a-thin-leather-col-pincel-ai-portrait.jpg', caption: 'Lace' },
-                        { img: 'https://i.ibb.co/kVwgWtD0/ai-editor-new-result-11.jpg', caption: 'Broken' },
-                        { img: 'https://i.ibb.co/99ptS8TT/ai-editor-new-result-14.jpg', caption: 'Owned' },
-                        { img: 'https://i.ibb.co/twqTLppS/Recolor-28b92745-ab5f-4295-885e-8b9eb7631068.jpg', caption: 'Princess' },
-                        { img: 'https://i.ibb.co/nVt5Y2V/Recolor-7937a131-22ff-476a-ad78-819c1e72b8dc.jpg', caption: 'Doll' }
-                    ]
-                },
-                mae: {
-                    id: 'mae',
-                    displayName: 'MISTRESS MAE',
-                    tagline: 'The MILF Thick Sadist · Maternal Discipline · Body Worship',
-                    heroImg: 'https://i.ibb.co/TDQYkrHx/IMG-20260607-WA0012-1.jpg',
-                    accentColor: 'var(--emerald)',
-                    bgGradient: 'linear-gradient(180deg, #0a1a0a 0%, #051005 50%, var(--pureblack) 100%)',
-                    bookLabel: 'Book Mae',
-                    packages: [
-                        {
-                            slug: 'stray-pup',
-                            title: 'The Stray Pup',
-                            price: '800 AED',
-                            desc: 'Begging, crawling, verbal correction.',
-                            img: 'https://i.ibb.co/h1xmDwkK/IMG-20260607-WA0014.jpg',
-                            features: ['Kneel and beg', 'Address her as Queen', 'Confess your worship', 'Eyes down'],
-                            calService: 'Mae – The Stray Pup'
-                        },
-                        {
-                            slug: 'maternal-leash',
-                            title: 'The Maternal Leash',
-                            price: '1,200 AED',
-                            desc: 'Collar, commands, maternal discipline.',
-                            img: 'https://i.ibb.co/3902n1SJ/IMG-20260607-WA0013.jpg',
-                            features: ['Collar & commands', 'Maternal discipline', 'Nurturing then punishment'],
-                            calService: 'Mae – The Maternal Leash'
-                        },
-                        {
-                            slug: 'thick-throne',
-                            title: 'The Thick Throne',
-                            price: '1,500 AED',
-                            desc: 'Facesitting, smothering, full‑body worship.',
-                            img: 'https://i.ibb.co/LzppRsgf/IMG-20260607-WA0012.jpg',
-                            features: ['Facesitting', 'Smothering', 'Full‑body worship', 'Her thickness consumes you'],
-                            calService: 'Mae – The Thick Throne'
-                        }
-                    ],
-                    gallery: [
-                        { img: 'https://i.ibb.co/TDQYkrHx/IMG-20260607-WA0012-1.jpg', caption: 'The Thick Goddess' },
-                        { img: 'https://i.ibb.co/h1xmDwkK/IMG-20260607-WA0014.jpg', caption: 'Maternal' },
-                        { img: 'https://i.ibb.co/3902n1SJ/IMG-20260607-WA0013.jpg', caption: 'Sensual' },
-                        { img: 'https://i.ibb.co/LzppRsgf/IMG-20260607-WA0012.jpg', caption: 'Commanding' },
-                        { img: 'https://i.ibb.co/MxdtWVGv/Virtual-Model-4ed189dd-c49c-4e6c-8548-f4b6ec929b6c.jpg', caption: 'Thick Throne' },
-                        { img: 'https://i.ibb.co/Y74Bpkbj/Virtual-Model-ad9058d6-4d1c-4c68-898a-46dc3c71d5df.jpg', caption: 'Green Room' }
-                    ]
-                },
-                pepper: {
-                    id: 'pepper',
-                    displayName: 'MISTRESS PEPPER',
-                    tagline: 'The Velvet Whip · Strict Discipline · Impact Play',
-                    heroImg: 'https://i.ibb.co/LbzPBtk/image-5.jpg',
-                    accentColor: 'var(--oxblood)',
-                    bgGradient: 'linear-gradient(180deg, #1a0a0a 0%, #0d0505 50%, var(--pureblack) 100%)',
-                    bookLabel: 'Book Pepper',
-                    packages: [
-                        {
-                            slug: 'the-correction',
-                            title: 'The Correction',
-                            price: '1,000 AED',
-                            desc: 'Precision discipline. Behavioral correction.',
-                            img: 'https://i.ibb.co/1GbxgKbx/image-6.jpg',
-                            features: ['Posture & protocol drills', 'Verbal correction', 'Light physical discipline'],
-                            calService: 'Pepper – The Correction'
-                        },
-                        {
-                            slug: 'protocol-session',
-                            title: 'Protocol Session',
-                            price: '1,800 AED',
-                            desc: 'Full protocol, position training, silent service.',
-                            img: 'https://i.ibb.co/wrcSL5M6/image-2.jpg',
-                            features: ['Full protocol training', 'Position drills', 'Speech protocols', 'Silent service'],
-                            calService: 'Pepper – Protocol Session'
-                        },
-                        {
-                            slug: 'velvet-whipping',
-                            title: 'Velvet Whipping',
-                            price: '2,500 AED',
-                            desc: 'Flogging, caning, cropping. The velvet whip.',
-                            img: 'https://i.ibb.co/fGxXsjgM/AQMbkp-NYc-Mgn-Qv-RCXA4-We-AD0r-GB0-MBti-Rr-SNBr-Q8t-ESXs9-ZNWMD-am-FB-LEJ1-Xst-G7-Iy-TM2wwhm-Ta3-QQq-SZc.jpg',
-                            features: ['Flogging', 'Caning', 'Cropping', 'Lesson delivered with precision'],
-                            calService: 'Pepper – Velvet Whipping'
-                        }
-                    ],
-                    gallery: [
-                        { img: 'https://i.ibb.co/LbzPBtk/image-5.jpg', caption: 'Velvet' },
-                        { img: 'https://i.ibb.co/1GbxgKbx/image-6.jpg', caption: 'Whip' },
-                        { img: 'https://i.ibb.co/wrcSL5M6/image-2.jpg', caption: 'Strict' },
-                        { img: 'https://i.ibb.co/N2jGR5Rk/image-1.jpg', caption: 'Correction' },
-                        { img: 'https://i.ibb.co/fGxXsjgM/AQMbkp-NYc-Mgn-Qv-RCXA4-We-AD0r-GB0-MBti-Rr-SNBr-Q8t-ESXs9-ZNWMD-am-FB-LEJ1-Xst-G7-Iy-TM2wwhm-Ta3-QQq-SZc.jpg', caption: 'Protocol' }
-                    ]
-                },
-                ron: {
-                    id: 'ron',
-                    displayName: 'MASTER RON',
-                    tagline: 'The Punisher · House Bull · Muscle & Endurance',
-                    heroImg: 'https://i.ibb.co/HLQctpR1/IMG-20260606-WA0011.jpg',
-                    accentColor: 'var(--neonblue)',
-                    bgGradient: 'linear-gradient(180deg, #001a2a 0%, #000d15 50%, var(--pureblack) 100%)',
-                    bookLabel: 'Book Ron',
-                    packages: [
-                        {
-                            slug: 'bull-session',
-                            title: 'Bull Session',
-                            price: '1,500 AED',
-                            desc: 'Brutal impact. Raw dominance.',
-                            img: 'https://i.ibb.co/ZRWgpk0h/IMG-20260606-WA0012.jpg',
-                            features: ['Brutal impact', 'Forced endurance', 'Predicament bondage', 'You take it because he says so'],
-                            calService: 'Ron – Bull Session'
-                        },
-                        {
-                            slug: 'heavy-punishment',
-                            title: 'Heavy Punishment',
-                            price: '2,800 AED',
-                            desc: 'Endurance tested. Limits shattered.',
-                            img: 'https://i.ibb.co/N6CT3Kw6/IMG-20260606-WA0004.jpg',
-                            features: ['Heavy impact', 'Prolonged endurance', 'Stamina test', 'You keep taking until silence'],
-                            calService: 'Ron – Heavy Punishment'
-                        },
-                        {
-                            slug: 'endurance-test',
-                            title: 'Endurance Test',
-                            price: '4,000 AED',
-                            desc: 'The ultimate physical challenge.',
-                            img: 'https://i.ibb.co/p6jtDFBk/IMG-20260604-WA0012.jpg',
-                            features: ['Maximum endurance', 'No limits', 'You prove your worth', 'Most don’t make it to silence'],
-                            calService: 'Ron – Endurance Test'
-                        }
-                    ],
-                    gallery: [
-                        { img: 'https://i.ibb.co/HLQctpR1/IMG-20260606-WA0011.jpg', caption: 'The Bull' },
-                        { img: 'https://i.ibb.co/ZRWgpk0h/IMG-20260606-WA0012.jpg', caption: 'Punisher' },
-                        { img: 'https://i.ibb.co/N6CT3Kw6/IMG-20260606-WA0004.jpg', caption: 'Endurance' },
-                        { img: 'https://i.ibb.co/p6jtDFBk/IMG-20260604-WA0012.jpg', caption: 'Muscle' }
-                    ]
-                }
-            }
-        };
-
-        // Render a single package card
-        function renderPackageCard(pkg, personaId) {
-            const featuresHtml = pkg.features.map(f => `<li>${f}</li>`).join('');
-            return `
-                <div class="package-preview">
-                    <img src="${pkg.img}" alt="${pkg.title}" loading="lazy" />
-                    <div class="pkg-body">
-                        <h3>${pkg.title}</h3>
-                        <div class="price">${pkg.price}</div>
-                        <p class="pkg-desc">${pkg.desc}</p>
-                        <div class="pkg-actions">
-                            <button class="btn-view" 
-                                onclick="openViewFromData('${personaId}', '${pkg.slug}')">View</button>
-                            <button class="btn" 
-                                onclick="book('${pkg.calService}')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Render gallery items
-        function renderGalleryItems(gallery) {
-            return gallery.map(item => `
-                <div class="curated-item">
-                    <img src="${item.img}" alt="" loading="lazy" />
-                    <div class="caption">${item.caption}</div>
-                </div>
-            `).join('');
-        }
-
-        // Render all packages + gallery for one persona into the page
-        function renderPersonaSections() {
-            Object.values(SITE_DATA.personas).forEach(persona => {
-                const section = document.getElementById(persona.id);
-                if (!section) return;
-
-                // Replace the static packages-grid
-                const packagesContainer = section.querySelector('.packages-grid');
-                if (packagesContainer) {
-                    packagesContainer.innerHTML = persona.packages
-                        .map(pkg => renderPackageCard(pkg, persona.id))
-                        .join('');
-                }
-
-                // Replace the static curated-gallery (the one after "Gallery" h2)
-                const galleries = section.querySelectorAll('.curated-gallery');
-                if (galleries.length > 0) {
-                    // The last .curated-gallery in the section is the persona gallery
-                    const galleryEl = galleries[galleries.length - 1];
-                    galleryEl.innerHTML = renderGalleryItems(persona.gallery);
-                }
-            });
-        }
-
-        // New openView that uses the centralized data (no more brittle title matching)
-        function openViewFromData(personaId, packageSlug) {
-            const persona = SITE_DATA.personas[personaId];
-            if (!persona) return;
-
-            const pkg = persona.packages.find(p => p.slug === packageSlug);
-            if (!pkg) return;
-
-            document.getElementById('lightbox-img').src = pkg.img;
-            document.getElementById('lightbox-title').textContent = pkg.title;
-            document.getElementById('lightbox-price').textContent = pkg.price;
-
-            const featuresList = document.getElementById('lightbox-features');
-            featuresList.innerHTML = '';
-            pkg.features.forEach(f => {
-                const li = document.createElement('li');
-                li.textContent = f;
-                featuresList.appendChild(li);
-            });
-
-            const bookBtn = document.getElementById('lightbox-book-btn');
-            bookBtn.onclick = () => {
-                book(pkg.calService);
-                closeLightbox();
-            };
-
-            document.getElementById('lightbox-overlay').classList.add('active');
-        }
-
-        // Initialize data-driven rendering after DOM is ready
-        function initDataDrivenSite() {
-            renderPersonaSections();
-
-            console.log('%c[House of Keysha] Data-driven rendering initialized. All packages + galleries now come from SITE_DATA.', 'color:#0a0');
-        }
-
-        // ═══════════════════════════════════════════════════════════════
-        // N8N / BACKEND INTEGRATION HOOKS (ready to wire)
-        // Replace the endpoint below with your real n8n webhook URL
-        // ═══════════════════════════════════════════════════════════════
-        const N8N_CONFIG = {
-            // TODO: Replace with your actual n8n webhook when ready
-            // Example: 'https://n8n.yourdomain.com/webhook/houseofkeysha-inquiry'
-            bookingWebhookUrl: null,           // Set this to enable real submissions
-            useBasicAuth: false,
-            basicAuthHeader: '',               // e.g. 'Basic abc123' or custom header
-        };
-
-        async function submitInquiryToN8n(payload) {
-            // payload example:
-            // { type: 'booking' | 'duo' | 'tour' | 'vault' | 'general',
-            //   persona: 'Keysha', service: '...', name, contact, datetime, notes, totalAED, source: 'website' }
-
-            console.log('[n8n] Inquiry payload ready:', payload);
-
-            if (!N8N_CONFIG.bookingWebhookUrl) {
-                // No webhook configured yet — just log + show nice message
-                console.warn('[n8n] No webhook URL set in N8N_CONFIG. Form data is captured but not sent.');
-                return { ok: true, simulated: true };
-            }
-
-            try {
-                const headers = { 'Content-Type': 'application/json' };
-                if (N8N_CONFIG.useBasicAuth && N8N_CONFIG.basicAuthHeader) {
-                    headers['Authorization'] = N8N_CONFIG.basicAuthHeader;
-                }
-
-                const res = await fetch(N8N_CONFIG.bookingWebhookUrl, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({
-                        ...payload,
-                        timestamp: new Date().toISOString(),
-                        site: 'houseofkeysha.netlify.app'
-                    })
-                });
-
-                if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
-                return { ok: true };
-            } catch (err) {
-                console.error('[n8n] Submission failed:', err);
-                // Still show success to the user (we can queue or email fallback later)
-                return { ok: false, error: err.message };
-            }
-        }
-
-        // Example: call this from the booking form submit instead of (or in addition to) just showing success
-        // We will wire it properly in the next pass.
-
-        // Run after the rest of the script has set up
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initDataDrivenSite);
-        } else {
-            initDataDrivenSite();
-        }
-
-        // ── ADMIN HELPERS (demo for now — will connect to Supabase + real booking refs)
-        function openAdminModal() {
-            document.getElementById('admin-modal').classList.add('open');
-            document.getElementById('admin-content').style.display = 'none';
-        }
-
-        function unlockAdmin() {
-            const pass = document.getElementById('admin-pass').value.trim();
-            if (pass === 'empire2026' || pass === 'keysha') {
-                document.getElementById('admin-content').style.display = 'block';
-                calcCommission();
-            } else {
-                alert('Incorrect passcode. (Demo only: empire2026)');
-            }
-        }
-
-        function calcCommission() {
-            const persona = document.getElementById('comm-persona').value;
-            const price = parseFloat(document.getElementById('comm-price').value) || 0;
-            const hours = parseFloat(document.getElementById('comm-hours').value) || 1;
-            const total = price * hours;
-            let escort = 0, house = 0, note = '';
-
-            if (persona === 'becky') {
-                escort = total * 0.25;
-                house = total * 0.75;
-                note = 'Becky receives 25%. House of Keysha Empire takes the rest.';
-            } else if (persona === 'ron') {
-                escort = 500 * hours;
-                house = total - escort;
-                note = 'Ron flat 500 AED per hour. Everything on top is pure House profit.';
-            } else if (persona === 'keysha') {
-                escort = total * 0.15;
-                house = total - escort;
-                note = 'Keysha paths are complex (paypig, service, ownership, etc.). Screening decides exact split. House takes the majority.';
-            } else {
-                escort = total * 0.30;
-                house = total * 0.70;
-                note = 'Standard split (will be configurable per persona in real admin).';
-            }
-
-            document.getElementById('comm-result').innerHTML = `
-                <strong>Total Revenue:</strong> ${total} AED<br>
-                <strong>Escort Payout:</strong> ${escort.toFixed(0)} AED<br>
-                <strong>House of Keysha Empire:</strong> ${house.toFixed(0)} AED<br>
-                <small>${note}</small>
-            `;
-        }
-
-        function lookupClient() {
-            const ref = document.getElementById('booking-ref').value.trim().toUpperCase();
-            const box = document.getElementById('client-profile');
-            box.style.display = 'block';
-
-            if (!ref) {
-                box.textContent = 'Enter a booking reference (e.g. HKE-2406-038).';
-                return;
-            }
-
-            // Demo — real version queries Supabase for full screening + trigger words + ownership deep drivers
-            box.textContent = `Booking Ref: ${ref}
-Persona: Keysha
-Interest Path: Ownership (24/7)
-Deep Driver: Needs to surrender after being in charge at work for years.
-Willing: Housework, tributes, chastity, errands, free use.
-Current: Single, small tributes sent before. No current owner.
-Experience: None → Recommended: Micro session first to test.
-Trigger words from real data: "good boy", "prove your worth", "you exist to serve".
-Next Step: Push for deposit + micro session.`;
-        }
-
-        function toggleScreeningQuestions() {
-            const interest = document.getElementById('book-interest').value;
-            const ownDiv = document.getElementById('ownership-questions');
-            ownDiv.style.display = (interest === 'ownership') ? 'block' : 'none';
-        }
-
-        console.log('%c[House of Keysha Empire] Site initialized. Admin + commission + client profile tools added. WhatsApp data ingestion next.', 'color:#0a0');
-    </script>
 </body>
 </html>
